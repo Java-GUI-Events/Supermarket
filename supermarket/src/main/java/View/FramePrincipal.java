@@ -28,9 +28,8 @@ public class FramePrincipal extends JFrame{
 
         // Criação dos Componentes do Painel Inicial
         JLabel labelImagem = new JLabel(imagem);
-        JButton btnCadastro = new JButton("CADASTRAR");
+        JButton btnVenda = new JButton("VENDAS");
         JButton btnEstoque = new JButton("ESTOQUE");
-        JButton btnVendas = new JButton("VENDAS");
 
         // Ação do Botão 
                 // ação para trocar os cards
@@ -41,33 +40,43 @@ public class FramePrincipal extends JFrame{
             }
         });
 
-        // btnCadastro.addActionListener(new ActionListener() {
-        //     @Override
-        //     public void actionPerformed(java.awt.event.ActionEvent e) {
+        btnVenda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                cardLayout.previous(cardsPainel);
+            }
+        });
 
-        //     }
-            
-        // });
+
 
         // Adicionando os Componentes ao Painel Inicial
         inicialPainel.add(labelImagem, BorderLayout.NORTH);
-        inicialPainel.add(btnCadastro, BorderLayout.WEST);
+        inicialPainel.add(btnVenda, BorderLayout.WEST);
         inicialPainel.add(btnEstoque, BorderLayout.EAST);
-        inicialPainel.add(btnVendas, BorderLayout.CENTER);
 
         // Configuração do TabbedPane
         cardsPainel.add(inicialPainel, "Painel Inicial");
+        //cardsPainel.add(vendasPainel, "Estoque");
+
         JTabbedPane abas = new JTabbedPane();
-        abas.add("Lista de Produtos", new ListaProdutos());
         abas.add("Cadastro de Produtos", new CadastroProdutos());
+        abas.add("Lista de Produtos (Estoque)", new ListaProdutos());
         cardsPainel.add(abas, "TabbedPane");
         add(cardsPainel);
 
-        setBounds(300, 250, 415, 500);
+        JTabbedPane abasVendas = new JTabbedPane();
+        abasVendas.add("Cadastro de Clientes", new CadastroClientes());
+        abasVendas.add("Clientes VIP Cadastrados", new ClientesVIP());
+        abasVendas.add("Realizar Compra", new Vendas());
+        cardsPainel.add(abasVendas, "TabbedAbas");
+        add(cardsPainel);
+
+        setBounds(300, 250, 450, 500);
     }
 
     public void run() {
         setVisible(true);
+        this.pack();
     }
 
 }
