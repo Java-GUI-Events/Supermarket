@@ -2,7 +2,7 @@ package Model;
 
 public class EstoqueVendas {
     // atributos
-    private String nomeComprador;
+    private String nomeComprador; // chave primária
     private String tipoProduto;
     private String dataVenda;
     private String valor;
