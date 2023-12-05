@@ -1,6 +1,6 @@
 package Model;
 
-public class ClienteVIP {
+public class ClientesVIP {
     // atributos
     private String nome;
     private String cpf; // chave primária
@@ -41,7 +41,7 @@ public class ClienteVIP {
     }
 
     // construtor
-     public ClienteVIP(String nome, String cpf, String dataNascimento, String telefone, String cep) {
+     public ClientesVIP(String nome, String cpf, String dataNascimento, String telefone, String cep) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
