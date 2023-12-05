@@ -12,37 +12,37 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import Model.EstoqueVendas;
+import Model.CadastroProdutos;
 
 import java.awt.*;
 
-public class VendasPainel extends JPanel {
+public class CadastroProdutosView extends JPanel{
     // Atributos
 
     // JTextField
-    private JTextField inputCliente;
     private JTextField inputProduto;
-    private JTextField inputData;
-    private JTextField inputValor;
-
+    private JTextField inputCodigo;
+    private JTextField inputMarca;
+    
     // JLabel
-    private JLabel labelCliente;
     private JLabel labelProduto;
-    private JLabel labelData;
-    private JLabel labelValor;
+    private JLabel labelCodigo;
+    private JLabel labelMarca;
 
     // JButton
     private JButton btnCadastrar;
+    private JButton btnApagar;
+    private JButton btnAtualizar;
 
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<EstoqueVendas> vendas = new ArrayList<>();
+    private List<CadastroProdutos> produtos = new ArrayList<>();
     private int linhaSelecionada = -1;
 
     // Construtor
-    public VendasPainel() {
-        // JPanel - Painéis
+    public CadastroProdutosView() {
+         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel inputPanel = new JPanel();
         JPanel btnPanel = new JPanel();
@@ -53,41 +53,40 @@ public class VendasPainel extends JPanel {
 
         // Construindo a tabela
         tableModel = new DefaultTableModel();
-        tableModel.addColumn("Cliente");
         tableModel.addColumn("Produto");
-        tableModel.addColumn("Data");
-        tableModel.addColumn("Valor");
+        tableModel.addColumn("Código");
+        tableModel.addColumn("Marca");
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
 
         // Definindo o tamanho dos JTextField
-        inputCliente = new JTextField(20);
         inputProduto = new JTextField(20);
-        inputData = new JTextField(20);
-        inputValor = new JTextField(20);
-
+        inputCodigo = new JTextField(20);
+        inputMarca = new JTextField(20);
+       
         // Definindo a escrita dos JLabel
-        labelCliente = new JLabel("Cliente");
         labelProduto = new JLabel("Produto");
-        labelData = new JLabel("Data");
-        labelValor = new JLabel("Valor");
+        labelCodigo = new JLabel("Codigo");
+        labelMarca = new JLabel("Marca");
 
         // Definindo os botões JButton
         btnCadastrar = new JButton("Cadastrar");
+        btnApagar = new JButton("Apagar");
+        btnAtualizar = new JButton("Atualizar");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
-        inputPanel.add(labelCliente);
-        inputPanel.add(inputCliente);
         inputPanel.add(labelProduto);
         inputPanel.add(inputProduto);
-        inputPanel.add(labelData);
-        inputPanel.add(inputData);
-        inputPanel.add(labelValor);
-        inputPanel.add(inputValor);
+        inputPanel.add(labelCodigo);
+        inputPanel.add(inputCodigo);
+        inputPanel.add(labelMarca);
+        inputPanel.add(inputMarca);
 
         // Adicionando os JButton ao btnPanel
         btnPanel.add(btnCadastrar);
+        btnPanel.add(btnApagar);
+        btnPanel.add(btnAtualizar);
 
         // Definindo o mainPanel
         this.add(mainPanel);
@@ -95,5 +94,4 @@ public class VendasPainel extends JPanel {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
     }
-
 }
