@@ -1,13 +1,13 @@
 package Model;
 
-public class CadastroProdutos {
+public class Produtos {
     // atributos
     private String nomeProduto;
     private String codigoBarras; // chave primária 
     private String marca;
    
    // construtor
-    public CadastroProdutos(String nomeProduto, String codigoBarras, String marca) {
+    public Produtos(String nomeProduto, String codigoBarras, String marca) {
         this.nomeProduto = nomeProduto;
         this.codigoBarras = codigoBarras;
         this.marca = marca;
