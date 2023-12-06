@@ -1,6 +1,6 @@
 package Model;
 
-public class Cliente {
+public class Clientes {
     // atributos
     private String nome;
     private String cpf; // chave primária
@@ -32,7 +32,7 @@ public class Cliente {
     }
 
     // construtor
-    public Cliente(String nome, String cpf, String dataNascimento) {
+    public Clientes(String nome, String cpf, String dataNascimento) {
         this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;

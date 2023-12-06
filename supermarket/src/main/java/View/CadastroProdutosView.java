@@ -6,24 +6,32 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import Model.CadastroProdutos;
+import Controller.CadastroProdutos.CadastroControl;
+import Controller.CadastroProdutos.CadastroDAO;
+import DAO.ProdutosDAO;
+import Model.Produtos;
 
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 import java.awt.*;
 
-public class CadastroProdutosView extends JPanel{
+public class CadastroProdutosView extends JPanel {
     // Atributos
 
     // JTextField
     private JTextField inputProduto;
     private JTextField inputCodigo;
     private JTextField inputMarca;
-    
+
     // JLabel
     private JLabel labelProduto;
     private JLabel labelCodigo;
@@ -37,12 +45,12 @@ public class CadastroProdutosView extends JPanel{
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<CadastroProdutos> produtos = new ArrayList<>();
+    private List<Produtos> produtos = new ArrayList<>();
     private int linhaSelecionada = -1;
 
     // Construtor
     public CadastroProdutosView() {
-         // JPanel - Painéis
+        // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel inputPanel = new JPanel();
         JPanel btnPanel = new JPanel();
@@ -64,7 +72,7 @@ public class CadastroProdutosView extends JPanel{
         inputProduto = new JTextField(20);
         inputCodigo = new JTextField(20);
         inputMarca = new JTextField(20);
-       
+
         // Definindo a escrita dos JLabel
         labelProduto = new JLabel("Produto");
         labelCodigo = new JLabel("Codigo");
@@ -93,5 +101,47 @@ public class CadastroProdutosView extends JPanel{
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(inputPanel, BorderLayout.NORTH);
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
+
+        // Criando o banco de dados
+        new CadastroDAO().criaTabela();
+
+        // atualizando a tabela
+        atualizarTabela();
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                linhaSelecionada = table.rowAtPoint(evt.getPoint());
+                if (linhaSelecionada != -1) {
+                    inputProduto.setText((String) table.getValueAt(linhaSelecionada, 0));
+                    inputCodigo.setText((String) table.getValueAt(linhaSelecionada, 1));
+                    inputMarca.setText((String) table.getValueAt(linhaSelecionada, 2));
+                }
+            }
+        });
+
+        CadastroControl operacoes = new CadastroControl(produtos, tableModel, table);
+
+        btnCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                operacoes.cadastrar(inputProduto.getText(), inputCodigo.getText(), inputMarca.getText());
+                inputProduto.setText("");
+                inputCodigo.setText("");
+                inputMarca.setText("");
+            }
+        });
+
     }
+
+     private void atualizarTabela() {
+            // atualizar tabela pelo banco de dados
+            tableModel.setRowCount(0);
+            produtos = new CadastroDAO().listarTodos();
+            for (Produtos produto : produtos) {
+                tableModel.addRow(new Object[] {produto.getNomeProduto(), produto.getCodigoBarras(), produto.getMarca()});
+            }
+    
+        }
+
 }
