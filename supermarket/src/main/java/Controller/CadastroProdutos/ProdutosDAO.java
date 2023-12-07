@@ -125,4 +125,28 @@ public class ProdutosDAO {
         }
     }
 
+    public Produtos buscarPorCodigo(String codigo) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Produtos produto = null;
+        try {
+            stmt = connection.prepareStatement("SELECT * FROM cadastro_produtos WHERE codigo = ?");
+            stmt.setString(1, codigo);
+            rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                produto = new Produtos(
+                        rs.getString("nome"),
+                        rs.getString("codigo"),
+                        rs.getString("quantidade"),
+                        rs.getString("preco"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex);
+        } finally {
+            ConnectionFactory.closeConnection(connection, stmt, rs);
+        }
+        return produto;
+    }
+
 }

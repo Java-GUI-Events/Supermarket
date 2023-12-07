@@ -6,13 +6,22 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import Controller.CadastroProdutos.ProdutosDAO;
+import Model.Produtos;
 import Model.Vendas;
+
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.*;
 
 import java.awt.*;
 
@@ -42,23 +51,22 @@ public class RegistroVendasView extends JPanel {
     public RegistroVendasView() {
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
-        JPanel pesquisarPanel = new JPanel();
-        JPanel produtoPanel = new JPanel();
         JPanel pagarPanel = new JPanel();
+        JPanel pesquisaPanel = new JPanel();
 
         // Layout dos Painéis
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         mainPanel.setLayout(new BorderLayout());
 
         // Construindo a tabela
-        // tableModel = new DefaultTableModel();
-        // tableModel.addColumn("ID Venda");
-        // tableModel.addColumn("CPF");
-        // tableModel.addColumn("Data Venda");
-        // tableModel.addColumn("Valor");
-        // table = new JTable(tableModel);
-        // JScrollPane scrollPane = new JScrollPane();
-        // scrollPane.setViewportView(table);
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Nome");
+        tableModel.addColumn("Código");
+        tableModel.addColumn("Quantidade");
+        tableModel.addColumn("Preço");
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setViewportView(table);
 
         // Definindo o tamanho dos JTextField
         inputCPF = new JTextField(20);
@@ -70,17 +78,17 @@ public class RegistroVendasView extends JPanel {
 
         // Definindo os botões JButton
         btnPesquisar = new JButton("Pesquisar Cliente");
-        btnProduto = new JButton("Pesquisar Produto");
+        btnProduto = new JButton("Adicionar Produto");
         btnPagar = new JButton("Fechar Pedido");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
-        pesquisarPanel.add(labelCPF);
-        pesquisarPanel.add(inputCPF);
-        pesquisarPanel.add(btnPesquisar);
+        pesquisaPanel.add(labelCPF);
+        pesquisaPanel.add(inputCPF);
+        pesquisaPanel.add(btnPesquisar);
 
-        produtoPanel.add(labelProduto);
-        produtoPanel.add(inputProduto);
-        produtoPanel.add(btnProduto);
+        pesquisaPanel.add(labelProduto);
+        pesquisaPanel.add(inputProduto);
+        pesquisaPanel.add(btnProduto);
 
         pagarPanel.add(btnPagar);
 
@@ -90,9 +98,37 @@ public class RegistroVendasView extends JPanel {
         // Definindo o mainPanel
         this.add(mainPanel);
         //mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(pesquisarPanel, BorderLayout.NORTH);
-        mainPanel.add(produtoPanel, BorderLayout.CENTER);
+        mainPanel.add(pesquisaPanel, BorderLayout.NORTH);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(pagarPanel, BorderLayout.SOUTH);
+
+
+        btnProduto.addActionListener(e -> {
+        // Obtém o código inserido pelo usuário
+        String codigoProduto = inputProduto.getText().trim();
+
+        // Verifica se o código não está vazio
+        if (!codigoProduto.isEmpty()) {
+            // Cria uma instância do ProdutosDAO
+            ProdutosDAO produtosDAO = new ProdutosDAO();
+
+            // Busca o produto no banco de dados com base no código
+            Produtos produto = produtosDAO.buscarPorCodigo(codigoProduto);
+
+            // Verifica se o produto foi encontrado
+            if (produto != null) {
+                
+            } else {
+                // Produto não encontrado - Exiba uma mensagem de erro ou faça o tratamento adequado
+                // Por exemplo:
+                JOptionPane.showMessageDialog(this, "Produto não encontrado", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            // Código do produto está vazio - Exiba uma mensagem de erro ou faça o tratamento adequado
+            // Por exemplo:
+            JOptionPane.showMessageDialog(this, "Por favor, insira um código de produto", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    });
         
     }
 
