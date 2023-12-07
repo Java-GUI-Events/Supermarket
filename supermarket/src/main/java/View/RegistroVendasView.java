@@ -20,19 +20,17 @@ public class RegistroVendasView extends JPanel {
     // Atributos
 
     // JTextField
-    private JTextField inputCliente;
+    private JTextField inputCPF;
     private JTextField inputProduto;
-    private JTextField inputData;
-    private JTextField inputValor;
 
     // JLabel
-    private JLabel labelCliente;
+    private JLabel labelCPF;
     private JLabel labelProduto;
-    private JLabel labelData;
-    private JLabel labelValor;
 
     // JButton
-    private JButton btnCadastrar;
+    private JButton btnPesquisar;
+    private JButton btnProduto;
+    private JButton btnPagar;
 
     // JTable - Tabela
     private DefaultTableModel tableModel;
@@ -44,56 +42,58 @@ public class RegistroVendasView extends JPanel {
     public RegistroVendasView() {
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
-        JPanel inputPanel = new JPanel();
-        JPanel btnPanel = new JPanel();
+        JPanel pesquisarPanel = new JPanel();
+        JPanel produtoPanel = new JPanel();
+        JPanel pagarPanel = new JPanel();
 
         // Layout dos Painéis
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         mainPanel.setLayout(new BorderLayout());
 
         // Construindo a tabela
-        tableModel = new DefaultTableModel();
-        tableModel.addColumn("Cliente");
-        tableModel.addColumn("Produto");
-        tableModel.addColumn("Data");
-        tableModel.addColumn("Valor");
-        table = new JTable(tableModel);
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setViewportView(table);
+        // tableModel = new DefaultTableModel();
+        // tableModel.addColumn("ID Venda");
+        // tableModel.addColumn("CPF");
+        // tableModel.addColumn("Data Venda");
+        // tableModel.addColumn("Valor");
+        // table = new JTable(tableModel);
+        // JScrollPane scrollPane = new JScrollPane();
+        // scrollPane.setViewportView(table);
 
         // Definindo o tamanho dos JTextField
-        inputCliente = new JTextField(20);
+        inputCPF = new JTextField(20);
         inputProduto = new JTextField(20);
-        inputData = new JTextField(20);
-        inputValor = new JTextField(20);
 
         // Definindo a escrita dos JLabel
-        labelCliente = new JLabel("Cliente");
-        labelProduto = new JLabel("Produto");
-        labelData = new JLabel("Data");
-        labelValor = new JLabel("Valor");
+        labelCPF = new JLabel("CPF");
+        labelProduto = new JLabel("CÓDIGO PRODUTO");
 
         // Definindo os botões JButton
-        btnCadastrar = new JButton("Cadastrar");
+        btnPesquisar = new JButton("Pesquisar Cliente");
+        btnProduto = new JButton("Pesquisar Produto");
+        btnPagar = new JButton("Fechar Pedido");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
-        inputPanel.add(labelCliente);
-        inputPanel.add(inputCliente);
-        inputPanel.add(labelProduto);
-        inputPanel.add(inputProduto);
-        inputPanel.add(labelData);
-        inputPanel.add(inputData);
-        inputPanel.add(labelValor);
-        inputPanel.add(inputValor);
+        pesquisarPanel.add(labelCPF);
+        pesquisarPanel.add(inputCPF);
+        pesquisarPanel.add(btnPesquisar);
+
+        produtoPanel.add(labelProduto);
+        produtoPanel.add(inputProduto);
+        produtoPanel.add(btnProduto);
+
+        pagarPanel.add(btnPagar);
+
 
         // Adicionando os JButton ao btnPanel
-        btnPanel.add(btnCadastrar);
 
         // Definindo o mainPanel
         this.add(mainPanel);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(inputPanel, BorderLayout.NORTH);
-        mainPanel.add(btnPanel, BorderLayout.SOUTH);
+        //mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(pesquisarPanel, BorderLayout.NORTH);
+        mainPanel.add(produtoPanel, BorderLayout.CENTER);
+        mainPanel.add(pagarPanel, BorderLayout.SOUTH);
+        
     }
 
 }
