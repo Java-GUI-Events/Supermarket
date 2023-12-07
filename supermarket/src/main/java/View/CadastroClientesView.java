@@ -12,26 +12,30 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import Controller.CadastroClientes.ClientesControl;
+import Controller.CadastroClientes.ClientesDAO;
+import Controller.CadastroProdutos.ProdutosDAO;
+import Model.Clientes;
+import Model.Produtos;
+
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 import java.awt.*;
 
-import Model.ClientesVIP;
-
-public class CadastroClientes extends JPanel{
+public class CadastroClientesView extends JPanel{
     // Atributos
 
     // JTextField
     private JTextField inputNome;
     private JTextField inputCPF;
     private JTextField inputDataNasc;
-    private JTextField inputTelefone;
-    private JTextField inputCEP;
     
     // JLabel
     private JLabel labelNome;
     private JLabel labelCPF;
     private JLabel labelDataNasc;
-    private JLabel labelTelefone;
-    private JLabel labelCEP;
 
     // JButton
     private JButton btnCadastrar;
@@ -41,11 +45,11 @@ public class CadastroClientes extends JPanel{
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<ClientesVIP> clientesVIP = new ArrayList<>();
+    private List<Clientes> clientes = new ArrayList<>();
     private int linhaSelecionada = -1;
 
     // Construtor
-    public CadastroClientes() {
+    public CadastroClientesView() {
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel inputPanel = new JPanel();
@@ -60,8 +64,6 @@ public class CadastroClientes extends JPanel{
         tableModel.addColumn("Nome");
         tableModel.addColumn("CPF");
         tableModel.addColumn("Data de Nascimento");
-        tableModel.addColumn("Telefone");
-        tableModel.addColumn("CEP");
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
@@ -70,15 +72,11 @@ public class CadastroClientes extends JPanel{
         inputNome = new JTextField(20);
         inputCPF = new JTextField(20);
         inputDataNasc = new JTextField(20);
-        inputTelefone = new JTextField(20);
-        inputCEP = new JTextField(20);
 
         // Definindo a escrita dos JLabel
         labelNome = new JLabel("Nome");
         labelCPF = new JLabel("CPF");
         labelDataNasc = new JLabel("Data de Nascimento");
-        labelTelefone = new JLabel("Telefone");
-        labelCEP = new JLabel("CEP");
 
         // Definindo os botões JButton
         btnCadastrar = new JButton("Cadastrar");
@@ -92,10 +90,6 @@ public class CadastroClientes extends JPanel{
         inputPanel.add(inputCPF);
         inputPanel.add(labelDataNasc);
         inputPanel.add(inputDataNasc);
-        inputPanel.add(labelTelefone);
-        inputPanel.add(inputTelefone);
-        inputPanel.add(labelCEP);
-        inputPanel.add(inputCEP);
 
         // Adicionando os JButton ao btnPanel
         btnPanel.add(btnCadastrar);
@@ -107,7 +101,46 @@ public class CadastroClientes extends JPanel{
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(inputPanel, BorderLayout.NORTH);
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
+
+         // Criando o banco de dados
+        new ClientesDAO().criaTabela();
+
+        // atualizando a tabela
+        atualizarTabela();
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                linhaSelecionada = table.rowAtPoint(evt.getPoint());
+                if (linhaSelecionada != -1) {
+                    inputNome.setText((String) table.getValueAt(linhaSelecionada, 0));
+                    inputCPF.setText((String) table.getValueAt(linhaSelecionada, 1));
+                    inputDataNasc.setText((String) table.getValueAt(linhaSelecionada, 2));
+                }
+            }
+        });
+
+        ClientesControl operacoes = new ClientesControl(clientes, tableModel, table);
+
+        btnCadastrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                operacoes.cadastrar(inputNome.getText(), inputCPF.getText(), inputDataNasc.getText());
+                inputNome.setText("");
+                inputCPF.setText("");
+                inputDataNasc.setText("");
+            }
+        });
+
     }
 
+     private void atualizarTabela() {
+            // atualizar tabela pelo banco de dados
+            tableModel.setRowCount(0);
+            clientes = new ClientesDAO().listarTodos();
+            for (Clientes cliente : clientes) {
+                tableModel.addRow(new Object[] {cliente.getNome(), cliente.getCpf(), cliente.getDataNascimento()});
+            }
     
-}
+        }
+    }

@@ -16,7 +16,7 @@ import Model.Vendas;
 
 import java.awt.*;
 
-public class VendasPainel extends JPanel {
+public class RegistroVendasView extends JPanel {
     // Atributos
 
     // JTextField
@@ -41,7 +41,7 @@ public class VendasPainel extends JPanel {
     private int linhaSelecionada = -1;
 
     // Construtor
-    public VendasPainel() {
+    public RegistroVendasView() {
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel inputPanel = new JPanel();

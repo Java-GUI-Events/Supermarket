@@ -13,9 +13,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import Controller.CadastroProdutos.CadastroControl;
-import Controller.CadastroProdutos.CadastroDAO;
-import DAO.ProdutosDAO;
+import Controller.CadastroProdutos.ProdutosControl;
+import Controller.CadastroProdutos.ProdutosDAO;
 import Model.Produtos;
 
 import java.awt.event.ActionListener;
@@ -28,14 +27,16 @@ public class CadastroProdutosView extends JPanel {
     // Atributos
 
     // JTextField
-    private JTextField inputProduto;
+    private JTextField inputNome;
     private JTextField inputCodigo;
-    private JTextField inputMarca;
+    private JTextField inputQuantidade;
+    private JTextField inputPreco;
 
     // JLabel
-    private JLabel labelProduto;
+    private JLabel labelNome;
     private JLabel labelCodigo;
-    private JLabel labelMarca;
+    private JLabel labelQuantidade;
+    private JLabel labelPreco;
 
     // JButton
     private JButton btnCadastrar;
@@ -61,22 +62,25 @@ public class CadastroProdutosView extends JPanel {
 
         // Construindo a tabela
         tableModel = new DefaultTableModel();
-        tableModel.addColumn("Produto");
+        tableModel.addColumn("Nome");
         tableModel.addColumn("Código");
-        tableModel.addColumn("Marca");
+        tableModel.addColumn("Quantidade");
+        tableModel.addColumn("Preço");
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
 
         // Definindo o tamanho dos JTextField
-        inputProduto = new JTextField(20);
+        inputNome = new JTextField(20);
         inputCodigo = new JTextField(20);
-        inputMarca = new JTextField(20);
+        inputQuantidade = new JTextField(20);
+        inputPreco = new JTextField(20);
 
         // Definindo a escrita dos JLabel
-        labelProduto = new JLabel("Produto");
+        labelNome = new JLabel("Nome");
         labelCodigo = new JLabel("Codigo");
-        labelMarca = new JLabel("Marca");
+        labelQuantidade = new JLabel("Quantidade");
+        labelPreco = new JLabel("Preço");
 
         // Definindo os botões JButton
         btnCadastrar = new JButton("Cadastrar");
@@ -84,12 +88,14 @@ public class CadastroProdutosView extends JPanel {
         btnAtualizar = new JButton("Atualizar");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
-        inputPanel.add(labelProduto);
-        inputPanel.add(inputProduto);
+        inputPanel.add(labelNome);
+        inputPanel.add(inputNome);
         inputPanel.add(labelCodigo);
         inputPanel.add(inputCodigo);
-        inputPanel.add(labelMarca);
-        inputPanel.add(inputMarca);
+        inputPanel.add(labelQuantidade);
+        inputPanel.add(inputQuantidade);
+        inputPanel.add(labelPreco);
+        inputPanel.add(inputPreco);
 
         // Adicionando os JButton ao btnPanel
         btnPanel.add(btnCadastrar);
@@ -103,7 +109,7 @@ public class CadastroProdutosView extends JPanel {
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
 
         // Criando o banco de dados
-        new CadastroDAO().criaTabela();
+        new ProdutosDAO().criaTabela();
 
         // atualizando a tabela
         atualizarTabela();
@@ -113,22 +119,24 @@ public class CadastroProdutosView extends JPanel {
             public void mouseClicked(MouseEvent evt) {
                 linhaSelecionada = table.rowAtPoint(evt.getPoint());
                 if (linhaSelecionada != -1) {
-                    inputProduto.setText((String) table.getValueAt(linhaSelecionada, 0));
+                    inputNome.setText((String) table.getValueAt(linhaSelecionada, 0));
                     inputCodigo.setText((String) table.getValueAt(linhaSelecionada, 1));
-                    inputMarca.setText((String) table.getValueAt(linhaSelecionada, 2));
+                    inputQuantidade.setText((String) table.getValueAt(linhaSelecionada, 2));
+                    inputPreco.setText((String) table.getValueAt(linhaSelecionada, 3));
                 }
             }
         });
 
-        CadastroControl operacoes = new CadastroControl(produtos, tableModel, table);
+        ProdutosControl operacoes = new ProdutosControl(produtos, tableModel, table);
 
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                operacoes.cadastrar(inputProduto.getText(), inputCodigo.getText(), inputMarca.getText());
-                inputProduto.setText("");
+                operacoes.cadastrar(inputNome.getText(), inputCodigo.getText(), inputQuantidade.getText(), inputPreco.getText());
+                inputNome.setText("");
                 inputCodigo.setText("");
-                inputMarca.setText("");
+                inputQuantidade.setText("");
+                inputPreco.setText("");
             }
         });
 
@@ -137,9 +145,9 @@ public class CadastroProdutosView extends JPanel {
      private void atualizarTabela() {
             // atualizar tabela pelo banco de dados
             tableModel.setRowCount(0);
-            produtos = new CadastroDAO().listarTodos();
+            produtos = new ProdutosDAO().listarTodos();
             for (Produtos produto : produtos) {
-                tableModel.addRow(new Object[] {produto.getNomeProduto(), produto.getCodigoBarras(), produto.getMarca()});
+                tableModel.addRow(new Object[] {produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco()});
             }
     
         }
