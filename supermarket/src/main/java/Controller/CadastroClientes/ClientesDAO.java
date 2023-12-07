@@ -67,7 +67,7 @@ public class ClientesDAO {
 
 
     // Cadastrar Carro no banco de dados
-    public void cadastrar(String nome, String cpf, String nascimento) {
+    public void cadastrar(String nome, String cpf, String data_nascimento) {
         PreparedStatement stmt = null;
         // Consulta SQL para cadastrar na tabela
         String sql = "INSERT INTO cadastro_clientes (nome, cpf, data_nascimento) VALUES (?, ?, ?)";
@@ -75,7 +75,7 @@ public class ClientesDAO {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, nome);
             stmt.setString(2, cpf);
-            stmt.setString(3, nascimento);
+            stmt.setString(3, data_nascimento);
             stmt.executeUpdate();
             System.out.println("Dados inseridos com sucesso");
             JOptionPane.showMessageDialog(null, "Você Cadastrou!");
@@ -90,16 +90,16 @@ public class ClientesDAO {
     public void atualizar(String nome, String cpf, String data_nascimento) {
         PreparedStatement stmt = null;
         // Define a instrução SQL parametrizada para atualizar dados pela placa
-        String sql = "UPDATE cadastro_produtos SET nome = ?, data_nascimento = ? WHERE cpf = ?";
+        String sql = "UPDATE cadastro_clientes SET nome = ?, data_nascimento = ? WHERE cpf = ?";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, nome);
             stmt.setString(2, data_nascimento);
             stmt.setString(3, cpf);
             stmt.executeUpdate();
-            System.out.println("Cadastro de Produtos atualizados com sucesso");
+            System.out.println("Cadastro de Cliente atualizados com sucesso");
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar cadastro de produtos no banco de dados.", e);
+            throw new RuntimeException("Erro ao atualizar cadastro de clientes no banco de dados.", e);
         } finally {
             ConnectionFactory.closeConnection(connection, stmt);
         }
@@ -108,15 +108,14 @@ public class ClientesDAO {
      // Apagar dados do banco
      public void apagar(String cpf) {
         PreparedStatement stmt = null;
-        // Define a instrução SQL parametrizada para apagar dados pelo código de barras
-        String sql = "DELETE FROM cadastro_produtos WHERE cpf = ?";
+        String sql = "DELETE FROM cadastro_clientes WHERE cpf = ?";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, cpf);
-            stmt.executeUpdate(); // Executa a instrução SQL
-            System.out.println("Produto apagado com sucesso");
+            stmt.executeUpdate();
+            System.out.println("Cliente apagado com sucesso");
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao apagar produto no banco de dados.", e);
+            throw new RuntimeException("Erro ao apagar cliente no banco de dados.", e);
         } finally {
             ConnectionFactory.closeConnection(connection, stmt);
         }

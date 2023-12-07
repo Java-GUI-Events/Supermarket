@@ -24,10 +24,10 @@ public class VendasDAO {
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS registro_vendas (ID_VENDA VARCHAR(255) PRIMARY KEY ,CPF VARCHAR(255), DATA_VENDA VARCHAR(255), VALOR VARCHAR(255))";
+        String sql = "CREATE TABLE IF NOT EXISTS registro_vendas (ID_VENDA VARCHAR(255) PRIMARY KEY AUTO_INCREMENT ,CPF VARCHAR(255), DATA_VENDA VARCHAR(255), VALOR VARCHAR(255))";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Tabela de Cadastro de Produtos criada com sucesso!");
+            System.out.println("Tabela de Registro de Vendas criada com sucesso!");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao criar a tabela de cadastro de produtos: " + e.getMessage(), e);
         } finally {

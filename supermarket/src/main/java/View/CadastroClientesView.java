@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -14,9 +15,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Controller.CadastroClientes.ClientesControl;
 import Controller.CadastroClientes.ClientesDAO;
-import Controller.CadastroProdutos.ProdutosDAO;
 import Model.Clientes;
-import Model.Produtos;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -40,7 +39,7 @@ public class CadastroClientesView extends JPanel{
     // JButton
     private JButton btnCadastrar;
     private JButton btnApagar;
-    private JButton btnAtualizar;
+    private JButton btnEditar;
 
     // JTable - Tabela
     private DefaultTableModel tableModel;
@@ -67,6 +66,7 @@ public class CadastroClientesView extends JPanel{
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
+        table.setDefaultEditor(Object.class, null);
 
         // Definindo o tamanho dos JTextField
         inputNome = new JTextField(20);
@@ -81,7 +81,7 @@ public class CadastroClientesView extends JPanel{
         // Definindo os botões JButton
         btnCadastrar = new JButton("Cadastrar");
         btnApagar = new JButton("Apagar");
-        btnAtualizar = new JButton("Atualizar");
+        btnEditar = new JButton("Editar");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
         inputPanel.add(labelNome);
@@ -94,7 +94,7 @@ public class CadastroClientesView extends JPanel{
         // Adicionando os JButton ao btnPanel
         btnPanel.add(btnCadastrar);
         btnPanel.add(btnApagar);
-        btnPanel.add(btnAtualizar);
+        btnPanel.add(btnEditar);
 
         // Definindo o mainPanel
         this.add(mainPanel);
@@ -132,10 +132,31 @@ public class CadastroClientesView extends JPanel{
             }
         });
 
+        btnApagar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    operacoes.apagar(inputCPF.getText());
+                    JOptionPane.showMessageDialog(null, "O Cliente " + inputNome.getText() + " foi apagado!");
+                    inputNome.setText("");
+                    inputCPF.setText("");
+                    inputDataNasc.setText("");
+        }
+        });
+
+        btnEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    operacoes.atualizar(inputNome.getText(), inputCPF.getText(), inputDataNasc.getText());
+                    inputNome.setText("");
+                    inputCPF.setText("");
+                    inputDataNasc.setText("");
+                    JOptionPane.showMessageDialog(null, "Informação editada com Sucesso!");
+                }
+        });
+
     }
 
      private void atualizarTabela() {
-            // atualizar tabela pelo banco de dados
             tableModel.setRowCount(0);
             clientes = new ClientesDAO().listarTodos();
             for (Clientes cliente : clientes) {

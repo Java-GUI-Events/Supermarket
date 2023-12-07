@@ -31,6 +31,7 @@ public class RegistroVendasView extends JPanel {
     // JTextField
     private JTextField inputCPF;
     private JTextField inputProduto;
+    private JTextField valorTotal;
 
     // JLabel
     private JLabel labelCPF;
@@ -67,10 +68,13 @@ public class RegistroVendasView extends JPanel {
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
+        table.setDefaultEditor(Object.class, null);
 
         // Definindo o tamanho dos JTextField
         inputCPF = new JTextField(20);
         inputProduto = new JTextField(20);
+        valorTotal = new JTextField(10);
+        valorTotal.setEditable(false);
 
         // Definindo a escrita dos JLabel
         labelCPF = new JLabel("CPF");
@@ -90,6 +94,7 @@ public class RegistroVendasView extends JPanel {
         pesquisaPanel.add(inputProduto);
         pesquisaPanel.add(btnProduto);
 
+        pagarPanel.add(valorTotal);
         pagarPanel.add(btnPagar);
 
         // Adicionando os JButton ao btnPanel
@@ -101,18 +106,43 @@ public class RegistroVendasView extends JPanel {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(pagarPanel, BorderLayout.SOUTH);
 
-
-
         btnProduto.addActionListener(e -> {
             String codigoProduto = inputProduto.getText();
-            ProdutosDAO produtosDAO = new ProdutosDAO();
-            Produtos produto = produtosDAO.buscarPorCodigo(codigoProduto);
-            preencherTabelaProduto(produto); // Adiciona o produto na tabela
+            ProdutosDAO produtos = new ProdutosDAO();
+            Produtos produto = produtos.buscarProduto(codigoProduto);
+            preencherTabelaComProduto(produto); // Adiciona o produto na tabela
+        });
+
+        btnPagar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String[] opcoesPagamento = { "Formas de Pagamento💰💵", "Cartão de Crédito", "Dinheiro", "Cartão de Débito", "PIX" };
+                String formaPagamento = (String) JOptionPane.showInputDialog(null,
+                        "Selecione a forma de pagamento:", "Forma de Pagamento", JOptionPane.QUESTION_MESSAGE, null,
+                        opcoesPagamento, opcoesPagamento[0]);
+
+                if (formaPagamento != null) {
+                    JOptionPane.showMessageDialog(null, "Você escolheu pagar com: " + formaPagamento);
+                }
+            }
         });
 
     }
 
-    private void preencherTabelaProduto(Produtos produto) {
+    // Adicione esse método à classe RegistroVendasView
+    private void TotalProdutos() {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        double precoTotal = 0.0;
+
+        for (int i = 0; i < model.getRowCount(); i++) {
+            String precoString = model.getValueAt(i, 3).toString(); 
+            double preco = Double.parseDouble(precoString);
+            precoTotal += preco;
+        }
+        valorTotal.setText(String.valueOf(precoTotal));
+    }
+
+    private void preencherTabelaComProduto(Produtos produto) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         // Adicionando o produto a tabela
         Object[] listProducts = {
@@ -122,6 +152,7 @@ public class RegistroVendasView extends JPanel {
                 produto.getPreco()
         };
         model.addRow(listProducts);
+        TotalProdutos();
     }
 
 }

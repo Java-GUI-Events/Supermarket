@@ -41,7 +41,7 @@ public class CadastroProdutosView extends JPanel {
     // JButton
     private JButton btnCadastrar;
     private JButton btnApagar;
-    private JButton btnAtualizar;
+    private JButton btnEditar;
 
     // JTable - Tabela
     private DefaultTableModel tableModel;
@@ -69,6 +69,7 @@ public class CadastroProdutosView extends JPanel {
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
+        table.setDefaultEditor(Object.class, null); // não permitir editar a tabela
 
         // Definindo o tamanho dos JTextField
         inputNome = new JTextField(20);
@@ -85,7 +86,7 @@ public class CadastroProdutosView extends JPanel {
         // Definindo os botões JButton
         btnCadastrar = new JButton("Cadastrar");
         btnApagar = new JButton("Apagar");
-        btnAtualizar = new JButton("Atualizar");
+        btnEditar = new JButton("Editar");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
         inputPanel.add(labelNome);
@@ -100,7 +101,7 @@ public class CadastroProdutosView extends JPanel {
         // Adicionando os JButton ao btnPanel
         btnPanel.add(btnCadastrar);
         btnPanel.add(btnApagar);
-        btnPanel.add(btnAtualizar);
+        btnPanel.add(btnEditar);
 
         // Definindo o mainPanel
         this.add(mainPanel);
@@ -132,9 +133,40 @@ public class CadastroProdutosView extends JPanel {
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
+                operacoes.cadastrar(inputNome.getText(), inputCodigo.getText(), inputQuantidade.getText(), inputPreco.getText());
+                inputNome.setText("");
+                inputCodigo.setText("");
+                inputQuantidade.setText("");
+                inputPreco.setText("");
             }
         });
+
+        btnApagar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // verifica se tem alguma linha selecionada
+                    operacoes.apagar(inputCodigo.getText());
+                    JOptionPane.showMessageDialog(null, "O Produto " + inputNome.getText() + " foi apagado!");
+                    // Limpa os campos de entrada após a operação de exclusão
+                    inputNome.setText("");
+                    inputCodigo.setText("");
+                    inputQuantidade.setText("");
+                    inputPreco.setText("");
+        }
+        });
+
+        btnEditar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    operacoes.atualizar(inputNome.getText(), inputCodigo.getText(), inputQuantidade.getText(), inputPreco.getText());
+                    inputNome.setText("");
+                    inputCodigo.setText("");
+                    inputQuantidade.setText("");
+                    inputPreco.setText("");
+                    JOptionPane.showMessageDialog(null, "Informação editada com Sucesso!");
+                }
+        });
+
 
     }
 

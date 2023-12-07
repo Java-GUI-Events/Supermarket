@@ -88,10 +88,8 @@ public class ProdutosDAO {
         }
     }
 
-    // Atualizar dados no banco
     public void atualizar(String nome, String codigo, String quantidade, String preco) {
         PreparedStatement stmt = null;
-        // Define a instrução SQL parametrizada para atualizar dados pela placa
         String sql = "UPDATE cadastro_produtos SET nome = ?, quantidade = ?, preco = ? WHERE codigo = ?";
         try {
             stmt = connection.prepareStatement(sql);
@@ -125,7 +123,7 @@ public class ProdutosDAO {
         }
     }
 
-    public Produtos buscarPorCodigo(String codigo) {
+    public Produtos buscarProduto(String codigo) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         Produtos produto = null;
