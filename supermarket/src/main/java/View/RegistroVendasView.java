@@ -92,44 +92,36 @@ public class RegistroVendasView extends JPanel {
 
         pagarPanel.add(btnPagar);
 
-
         // Adicionando os JButton ao btnPanel
 
         // Definindo o mainPanel
         this.add(mainPanel);
-        //mainPanel.add(scrollPane, BorderLayout.CENTER);
+        // mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(pesquisaPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(pagarPanel, BorderLayout.SOUTH);
 
 
+
         btnProduto.addActionListener(e -> {
-        // Obtém o código inserido pelo usuário
-        String codigoProduto = inputProduto.getText().trim();
-
-        // Verifica se o código não está vazio
-        if (!codigoProduto.isEmpty()) {
-            // Cria uma instância do ProdutosDAO
+            String codigoProduto = inputProduto.getText();
             ProdutosDAO produtosDAO = new ProdutosDAO();
-
-            // Busca o produto no banco de dados com base no código
             Produtos produto = produtosDAO.buscarPorCodigo(codigoProduto);
+            preencherTabelaProduto(produto); // Adiciona o produto na tabela
+        });
 
-            // Verifica se o produto foi encontrado
-            if (produto != null) {
-                
-            } else {
-                // Produto não encontrado - Exiba uma mensagem de erro ou faça o tratamento adequado
-                // Por exemplo:
-                JOptionPane.showMessageDialog(this, "Produto não encontrado", "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-        } else {
-            // Código do produto está vazio - Exiba uma mensagem de erro ou faça o tratamento adequado
-            // Por exemplo:
-            JOptionPane.showMessageDialog(this, "Por favor, insira um código de produto", "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    });
-        
+    }
+
+    private void preencherTabelaProduto(Produtos produto) {
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        // Adicionando o produto a tabela
+        Object[] listProducts = {
+                produto.getNome(),
+                produto.getCodigo(),
+                produto.getQuantidade(),
+                produto.getPreco()
+        };
+        model.addRow(listProducts);
     }
 
 }

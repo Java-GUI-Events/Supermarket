@@ -132,11 +132,7 @@ public class CadastroProdutosView extends JPanel {
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                operacoes.cadastrar(inputNome.getText(), inputCodigo.getText(), inputQuantidade.getText(), inputPreco.getText());
-                inputNome.setText("");
-                inputCodigo.setText("");
-                inputQuantidade.setText("");
-                inputPreco.setText("");
+                
             }
         });
 

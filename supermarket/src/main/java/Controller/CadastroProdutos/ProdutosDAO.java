@@ -133,7 +133,6 @@ public class ProdutosDAO {
             stmt = connection.prepareStatement("SELECT * FROM cadastro_produtos WHERE codigo = ?");
             stmt.setString(1, codigo);
             rs = stmt.executeQuery();
-    
             if (rs.next()) {
                 produto = new Produtos(
                         rs.getString("nome"),
