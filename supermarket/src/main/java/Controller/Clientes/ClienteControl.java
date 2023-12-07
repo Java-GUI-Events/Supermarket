@@ -1,4 +1,4 @@
-package Controller.ClienteVIP;
+package Controller.Clientes;
 
 public class ClienteControl {
     

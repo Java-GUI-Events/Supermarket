@@ -1,4 +1,4 @@
-package Controller.ClienteVIP;
+package Controller.Clientes;
 import java.util.List;
 
 import javax.swing.JOptionPane;

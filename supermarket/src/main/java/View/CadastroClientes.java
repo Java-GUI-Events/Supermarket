@@ -16,7 +16,7 @@ import java.awt.*;
 
 import Model.ClientesVIP;
 
-public class CadastroClientesVIP extends JPanel{
+public class CadastroClientes extends JPanel{
     // Atributos
 
     // JTextField
@@ -45,7 +45,7 @@ public class CadastroClientesVIP extends JPanel{
     private int linhaSelecionada = -1;
 
     // Construtor
-    public CadastroClientesVIP() {
+    public CadastroClientes() {
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel inputPanel = new JPanel();

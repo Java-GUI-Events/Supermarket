@@ -12,7 +12,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import Model.EstoqueVendas;
+import Model.Vendas;
 
 import java.awt.*;
 
@@ -37,7 +37,7 @@ public class VendasPainel extends JPanel {
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<EstoqueVendas> vendas = new ArrayList<>();
+    private List<Vendas> vendas = new ArrayList<>();
     private int linhaSelecionada = -1;
 
     // Construtor
