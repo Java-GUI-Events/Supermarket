@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import Controller.CadastroProdutos.ProdutosDAO;
 import Model.Produtos;
 import Model.Vendas;
+import Controller.CadastroClientes.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,7 +26,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
-import java.awt.*;
+import java.time.LocalDate;
 
 public class RegistroVendasView extends JPanel {
     // Atributos
@@ -50,6 +53,8 @@ public class RegistroVendasView extends JPanel {
 
     // Construtor
     public RegistroVendasView() {
+        ClientesDAO clientesDAO = new ClientesDAO();
+        ProdutosDAO produtosDAO = new ProdutosDAO();
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel pagarPanel = new JPanel();
@@ -110,39 +115,53 @@ public class RegistroVendasView extends JPanel {
             String codigoProduto = inputProduto.getText();
             ProdutosDAO produtos = new ProdutosDAO();
             Produtos produto = produtos.buscarProduto(codigoProduto);
-            preencherTabelaComProduto(produto); // Adiciona o produto na tabela
+            tabelaPreenchida(produto); // Adiciona o produto na tabela
+        });
+
+        btnPesquisar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String cpf = inputCPF.getText();
+                boolean cpfEncontrado = clientesDAO.verificarCPF(cpf);
+
+                if (cpfEncontrado) {
+                    JOptionPane.showMessageDialog(null, "CPF encontrado no banco de dados!");
+                } else {
+                    int opcao = JOptionPane.showConfirmDialog(null,
+                            "CPF não encontrado no banco de dados. Deseja se cadastrar?", "Cadastro de Clientes",
+                            JOptionPane.YES_NO_OPTION);
+                    if (opcao == JOptionPane.YES_OPTION) {
+                        // Abre o JTabbedPane para o cadastro de clientes
+                        
+                    }
+                }
+            }
         });
 
         btnPagar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] opcoesPagamento = { "Formas de Pagamento💰💵", "Cartão de Crédito", "Dinheiro", "Cartão de Débito", "PIX" };
-                String formaPagamento = (String) JOptionPane.showInputDialog(null,
-                        "Selecione a forma de pagamento:", "Forma de Pagamento", JOptionPane.QUESTION_MESSAGE, null,
-                        opcoesPagamento, opcoesPagamento[0]);
-
-                if (formaPagamento != null) {
-                    JOptionPane.showMessageDialog(null, "Você escolheu pagar com: " + formaPagamento);
-                }
+                // id = autoincremental no banco de dados
+                String cpfDoCliente = inputCPF.getText();
+                double totalVenda = Double.parseDouble(valorTotal.getText());
+                LocalDate dataDaVenda = LocalDate.now();
             }
         });
-
     }
 
-    // Adicione esse método à classe RegistroVendasView
     private void TotalProdutos() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         double precoTotal = 0.0;
 
         for (int i = 0; i < model.getRowCount(); i++) {
-            String precoString = model.getValueAt(i, 3).toString(); 
+            String precoString = model.getValueAt(i, 3).toString();
             double preco = Double.parseDouble(precoString);
             precoTotal += preco;
         }
         valorTotal.setText(String.valueOf(precoTotal));
     }
 
-    private void preencherTabelaComProduto(Produtos produto) {
+    private void tabelaPreenchida(Produtos produto) {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         // Adicionando o produto a tabela
         Object[] listProducts = {
@@ -154,5 +173,6 @@ public class RegistroVendasView extends JPanel {
         model.addRow(listProducts);
         TotalProdutos();
     }
+
 
 }
