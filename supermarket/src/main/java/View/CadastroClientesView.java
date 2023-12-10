@@ -13,9 +13,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import Controller.CadastroProdutos.ProdutosControl;
-import Controller.CadastroProdutos.ProdutosDAO;
-import Model.Produtos;
+import Controller.CadastroClientes.ClientesControl;
+import Controller.CadastroClientes.ClientesDAO;
+import Model.Clientes;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -23,20 +23,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
-public class CadastroProdutosView extends JPanel {
+public class CadastroClientesView extends JPanel{
     // Atributos
 
     // JTextField
     private JTextField inputNome;
-    private JTextField inputCodigo;
-    private JTextField inputQuantidade;
-    private JTextField inputPreco;
-
+    private JTextField inputCPF;
+    private JTextField inputDataNasc;
+    
     // JLabel
     private JLabel labelNome;
-    private JLabel labelCodigo;
-    private JLabel labelQuantidade;
-    private JLabel labelPreco;
+    private JLabel labelCPF;
+    private JLabel labelDataNasc;
 
     // JButton
     private JButton btnCadastrar;
@@ -46,11 +44,11 @@ public class CadastroProdutosView extends JPanel {
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<Produtos> produtos = new ArrayList<>();
+    private List<Clientes> clientes = new ArrayList<>();
     private int linhaSelecionada = -1;
 
     // Construtor
-    public CadastroProdutosView() {
+    public CadastroClientesView() {
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel inputPanel = new JPanel();
@@ -63,25 +61,22 @@ public class CadastroProdutosView extends JPanel {
         // Construindo a tabela
         tableModel = new DefaultTableModel();
         tableModel.addColumn("Nome");
-        tableModel.addColumn("Código");
-        tableModel.addColumn("Quantidade");
-        tableModel.addColumn("Preço");
+        tableModel.addColumn("CPF");
+        tableModel.addColumn("Data de Nascimento");
         table = new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
-        table.setDefaultEditor(Object.class, null); // não permitir editar a tabela
+        table.setDefaultEditor(Object.class, null);
 
         // Definindo o tamanho dos JTextField
         inputNome = new JTextField(20);
-        inputCodigo = new JTextField(20);
-        inputQuantidade = new JTextField(20);
-        inputPreco = new JTextField(20);
+        inputCPF = new JTextField(20);
+        inputDataNasc = new JTextField(20);
 
         // Definindo a escrita dos JLabel
         labelNome = new JLabel("Nome");
-        labelCodigo = new JLabel("Codigo");
-        labelQuantidade = new JLabel("Quantidade");
-        labelPreco = new JLabel("Preço");
+        labelCPF = new JLabel("CPF");
+        labelDataNasc = new JLabel("Data de Nascimento");
 
         // Definindo os botões JButton
         btnCadastrar = new JButton("Cadastrar");
@@ -91,12 +86,10 @@ public class CadastroProdutosView extends JPanel {
         // Adicionando os JLabel e os JTextField ao inputPanel
         inputPanel.add(labelNome);
         inputPanel.add(inputNome);
-        inputPanel.add(labelCodigo);
-        inputPanel.add(inputCodigo);
-        inputPanel.add(labelQuantidade);
-        inputPanel.add(inputQuantidade);
-        inputPanel.add(labelPreco);
-        inputPanel.add(inputPreco);
+        inputPanel.add(labelCPF);
+        inputPanel.add(inputCPF);
+        inputPanel.add(labelDataNasc);
+        inputPanel.add(inputDataNasc);
 
         // Adicionando os JButton ao btnPanel
         btnPanel.add(btnCadastrar);
@@ -109,8 +102,8 @@ public class CadastroProdutosView extends JPanel {
         mainPanel.add(inputPanel, BorderLayout.NORTH);
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
 
-        // Criando o banco de dados
-        new ProdutosDAO().criaTabela();
+         // Criando o banco de dados
+        new ClientesDAO().criaTabela();
 
         // atualizando a tabela
         atualizarTabela();
@@ -121,63 +114,54 @@ public class CadastroProdutosView extends JPanel {
                 linhaSelecionada = table.rowAtPoint(evt.getPoint());
                 if (linhaSelecionada != -1) {
                     inputNome.setText((String) table.getValueAt(linhaSelecionada, 0));
-                    inputCodigo.setText((String) table.getValueAt(linhaSelecionada, 1));
-                    inputQuantidade.setText((String) table.getValueAt(linhaSelecionada, 2));
-                    inputPreco.setText((String) table.getValueAt(linhaSelecionada, 3));
+                    inputCPF.setText((String) table.getValueAt(linhaSelecionada, 1));
+                    inputDataNasc.setText((String) table.getValueAt(linhaSelecionada, 2));
                 }
             }
         });
 
-        ProdutosControl operacoes = new ProdutosControl(produtos, tableModel, table);
+        ClientesControl operacoes = new ClientesControl(clientes, tableModel, table);
 
         btnCadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                operacoes.cadastrar(inputNome.getText(), inputCodigo.getText(), inputQuantidade.getText(), inputPreco.getText());
+                operacoes.cadastrar(inputNome.getText(), inputCPF.getText(), inputDataNasc.getText());
                 inputNome.setText("");
-                inputCodigo.setText("");
-                inputQuantidade.setText("");
-                inputPreco.setText("");
+                inputCPF.setText("");
+                inputDataNasc.setText("");
             }
         });
 
         btnApagar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // verifica se tem alguma linha selecionada
-                    operacoes.apagar(inputCodigo.getText());
-                    JOptionPane.showMessageDialog(null, "O Produto " + inputNome.getText() + " foi apagado!");
-                    // Limpa os campos de entrada após a operação de exclusão
+                    operacoes.apagar(inputCPF.getText());
+                    JOptionPane.showMessageDialog(null, "O Cliente " + inputNome.getText() + " foi apagado!");
                     inputNome.setText("");
-                    inputCodigo.setText("");
-                    inputQuantidade.setText("");
-                    inputPreco.setText("");
+                    inputCPF.setText("");
+                    inputDataNasc.setText("");
         }
         });
 
         btnEditar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    operacoes.atualizar(inputNome.getText(), inputCodigo.getText(), inputQuantidade.getText(), inputPreco.getText());
+                    operacoes.atualizar(inputNome.getText(), inputCPF.getText(), inputDataNasc.getText());
                     inputNome.setText("");
-                    inputCodigo.setText("");
-                    inputQuantidade.setText("");
-                    inputPreco.setText("");
+                    inputCPF.setText("");
+                    inputDataNasc.setText("");
                     JOptionPane.showMessageDialog(null, "Informação editada com Sucesso!");
                 }
         });
 
-
     }
 
      private void atualizarTabela() {
-            // atualizar tabela pelo banco de dados
             tableModel.setRowCount(0);
-            produtos = new ProdutosDAO().listarTodos();
-            for (Produtos produto : produtos) {
-                tableModel.addRow(new Object[] {produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco()});
+            clientes = new ClientesDAO().listarTodos();
+            for (Clientes cliente : clientes) {
+                tableModel.addRow(new Object[] {cliente.getNome(), cliente.getCpf(), cliente.getDataNascimento()});
             }
     
         }
-
-}
+    }

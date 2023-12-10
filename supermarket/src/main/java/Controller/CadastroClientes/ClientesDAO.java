@@ -1,4 +1,4 @@
-package Controller.ClienteVIP;
+package Controller.CadastroClientes;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 import Connection.ConnectionFactory;
 
-public class ClienteDAO {
+public class ClientesDAO {
      // códigos para o banco de dados
     // atributo
     private Connection connection;
     private List<Clientes> clientes;
 
-    public ClienteDAO() {
+    public ClientesDAO() {
         this.connection = ConnectionFactory.getConnection();
     }
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS cadastro_clientes (NOME VARCHAR(255), CODIGO VARCHAR(255) PRIMARY KEY, MARCA VARCHAR(255)";
+        String sql = "CREATE TABLE IF NOT EXISTS cadastro_clientes (NOME VARCHAR(255), CPF VARCHAR(255) PRIMARY KEY, DATA_NASCIMENTO VARCHAR(255))";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela de Cadastro de Clientes criada com sucesso!");
@@ -52,8 +52,8 @@ public class ClienteDAO {
                 // Para cada registro no ResultSet, cria um objeto Carros com os valores do registro
                 Clientes cliente = new Clientes(
                     rs.getString("nome"),
-                    rs.getString("codigo"),
-                    rs.getString("marca")
+                    rs.getString("cpf"),
+                    rs.getString("data_nascimento")
                 );
                 clientes.add(cliente); // Adiciona o objeto Carros à lista de carros
             }
@@ -67,15 +67,15 @@ public class ClienteDAO {
 
 
     // Cadastrar Carro no banco de dados
-    public void cadastrar(String nome, String codigo, String marca) {
+    public void cadastrar(String nome, String cpf, String data_nascimento) {
         PreparedStatement stmt = null;
         // Consulta SQL para cadastrar na tabela
-        String sql = "INSERT INTO cadastro_clientes (nome, codigo, marca) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO cadastro_clientes (nome, cpf, data_nascimento) VALUES (?, ?, ?)";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, nome);
-            stmt.setString(2, codigo);
-            stmt.setString(3, marca);
+            stmt.setString(2, cpf);
+            stmt.setString(3, data_nascimento);
             stmt.executeUpdate();
             System.out.println("Dados inseridos com sucesso");
             JOptionPane.showMessageDialog(null, "Você Cadastrou!");
@@ -85,5 +85,42 @@ public class ClienteDAO {
             ConnectionFactory.closeConnection(connection,stmt);
         }
     }
+
+    // Atualizar dados no banco
+    public void atualizar(String nome, String cpf, String data_nascimento) {
+        PreparedStatement stmt = null;
+        // Define a instrução SQL parametrizada para atualizar dados pela placa
+        String sql = "UPDATE cadastro_clientes SET nome = ?, data_nascimento = ? WHERE cpf = ?";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, nome);
+            stmt.setString(2, data_nascimento);
+            stmt.setString(3, cpf);
+            stmt.executeUpdate();
+            System.out.println("Cadastro de Cliente atualizados com sucesso");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar cadastro de clientes no banco de dados.", e);
+        } finally {
+            ConnectionFactory.closeConnection(connection, stmt);
+        }
+    }
+
+     // Apagar dados do banco
+     public void apagar(String cpf) {
+        PreparedStatement stmt = null;
+        String sql = "DELETE FROM cadastro_clientes WHERE cpf = ?";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, cpf);
+            stmt.executeUpdate();
+            System.out.println("Cliente apagado com sucesso");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao apagar cliente no banco de dados.", e);
+        } finally {
+            ConnectionFactory.closeConnection(connection, stmt);
+        }
+    }
+
+
 
 }
