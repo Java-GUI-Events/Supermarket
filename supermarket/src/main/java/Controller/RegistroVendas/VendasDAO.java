@@ -1,10 +1,12 @@
 package Controller.RegistroVendas;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +37,24 @@ public class VendasDAO {
         }
     }
 
-    
+    public void cadastrarVenda(String cpfCliente, LocalDate dataVenda, double valorTotal) {
+        PreparedStatement stmt = null;
+        String sql = "INSERT INTO registro_vendas (CPF, DATA_VENDA, VALOR) VALUES (?, ?, ?)";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, cpfCliente);
+            stmt.setDate(2, Date.valueOf(dataVenda));
+            stmt.setDouble(3, valorTotal);
+            stmt.executeUpdate();
+            System.out.println("Venda Registrada com Sucesso");
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao cadastrar a venda: " + e.getMessage(), e);
+        } finally {
+            ConnectionFactory.closeConnection(this.connection);
+        }
+    }
+
+
 
 
 }
