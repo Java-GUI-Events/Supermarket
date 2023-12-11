@@ -6,7 +6,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.CadastroProdutos.ProdutosDAO;
-import Model.Produtos;
 import Model.Vendas;
 
 
@@ -54,6 +53,5 @@ public class VendasControl {
         // Chama o método de exclusão no banco de dados
         atualizarTabela(); // Atualiza a tabela de exibição após a exclusão
     }
-
     
 }

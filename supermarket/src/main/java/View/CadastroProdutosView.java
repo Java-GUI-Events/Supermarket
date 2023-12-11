@@ -166,8 +166,6 @@ public class CadastroProdutosView extends JPanel {
                     JOptionPane.showMessageDialog(null, "Informação editada com Sucesso!");
                 }
         });
-
-
     }
 
      private void atualizarTabela() {
@@ -177,7 +175,6 @@ public class CadastroProdutosView extends JPanel {
             for (Produtos produto : produtos) {
                 tableModel.addRow(new Object[] {produto.getNome(), produto.getCodigo(), produto.getQuantidade(), produto.getPreco()});
             }
-    
         }
 
 }
