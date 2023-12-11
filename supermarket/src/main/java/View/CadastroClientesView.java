@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -28,7 +30,7 @@ public class CadastroClientesView extends JPanel{
 
     // JTextField
     private JTextField inputNome;
-    private JTextField inputCPF;
+    private JFormattedTextField inputCPF;
     private JTextField inputDataNasc;
     
     // JLabel
@@ -70,7 +72,8 @@ public class CadastroClientesView extends JPanel{
 
         // Definindo o tamanho dos JTextField
         inputNome = new JTextField(20);
-        inputCPF = new JTextField(20);
+        ClientesControl clientesControl = new ClientesControl(clientes, tableModel, table);
+        inputCPF = clientesControl.criarCampoCPFFormatado();
         inputDataNasc = new JTextField(20);
 
         // Definindo a escrita dos JLabel

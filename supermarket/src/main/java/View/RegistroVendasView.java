@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.CadastroProdutos.ProdutosDAO;
+import Controller.RegistroVendas.VendasControl;
+import Controller.RegistroVendas.VendasDAO;
 import Model.Produtos;
 import Model.Vendas;
 import Controller.CadastroClientes.*;
@@ -32,7 +35,7 @@ public class RegistroVendasView extends JPanel {
     // Atributos
 
     // JTextField
-    private JTextField inputCPF;
+    private JFormattedTextField inputCPF;
     private JTextField inputProduto;
     private JTextField valorTotal;
 
@@ -54,7 +57,6 @@ public class RegistroVendasView extends JPanel {
     // Construtor
     public RegistroVendasView() {
         ClientesDAO clientesDAO = new ClientesDAO();
-        ProdutosDAO produtosDAO = new ProdutosDAO();
         // JPanel - Painéis
         JPanel mainPanel = new JPanel();
         JPanel pagarPanel = new JPanel();
@@ -76,7 +78,8 @@ public class RegistroVendasView extends JPanel {
         table.setDefaultEditor(Object.class, null);
 
         // Definindo o tamanho dos JTextField
-        inputCPF = new JTextField(20);
+        ClientesControl clientesControl = new ClientesControl(null, tableModel, table);
+        inputCPF = clientesControl.criarCampoCPFFormatado();
         inputProduto = new JTextField(20);
         valorTotal = new JTextField(10);
         valorTotal.setEditable(false);
@@ -111,13 +114,22 @@ public class RegistroVendasView extends JPanel {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(pagarPanel, BorderLayout.SOUTH);
 
+
+        // Criando a tabela no banco de dados
+        new VendasDAO().criaTabela();
+
+        VendasControl operacoes = new VendasControl(vendas, tableModel, table);
+
+        // Tratamento de evento para o botão de ADICIONAR os produtos pelo código
         btnProduto.addActionListener(e -> {
             String codigoProduto = inputProduto.getText();
             ProdutosDAO produtos = new ProdutosDAO();
             Produtos produto = produtos.buscarProduto(codigoProduto);
-            tabelaPreenchida(produto); // Adiciona o produto na tabela
+            tabelaPreenchida(produto);
         });
 
+
+        // Tratamento de evento para o botão de pesquisar se o cliente está CADASTRADO
         btnPesquisar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,17 +139,12 @@ public class RegistroVendasView extends JPanel {
                 if (cpfEncontrado) {
                     JOptionPane.showMessageDialog(null, "CPF encontrado no banco de dados!");
                 } else {
-                    int opcao = JOptionPane.showConfirmDialog(null,
-                            "CPF não encontrado no banco de dados. Deseja se cadastrar?", "Cadastro de Clientes",
-                            JOptionPane.YES_NO_OPTION);
-                    if (opcao == JOptionPane.YES_OPTION) {
-                        // Abre o JTabbedPane para o cadastro de clientes
-                        
-                    }
+                    JOptionPane.showMessageDialog(null, "CPF não encontrado no banco de dados.");
                 }
             }
         });
 
+        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no BANCO DE DADOS
         btnPagar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

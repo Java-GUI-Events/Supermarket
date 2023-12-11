@@ -14,8 +14,7 @@ import java.util.List;
 import Connection.ConnectionFactory;
 
 public class ProdutosDAO {
-    // códigos para o banco de dados
-    // atributo
+    // Atributos
     private Connection connection;
     private List<Produtos> produtos;
 
@@ -23,7 +22,7 @@ public class ProdutosDAO {
         this.connection = ConnectionFactory.getConnection();
     }
 
-    // criar Tabela
+    // Criar Tabela
     public void criaTabela() {
         String sql = "CREATE TABLE IF NOT EXISTS cadastro_produtos (NOME VARCHAR(255),CODIGO VARCHAR(255) PRIMARY KEY, QUANTIDADE VARCHAR(255), PRECO VARCHAR(255))";
         try (Statement stmt = this.connection.createStatement()) {
@@ -36,42 +35,33 @@ public class ProdutosDAO {
         }
     }
 
-    // Listar todos os valores cadastrados
+    // Consultando os PRODUTOS existentes no BANCO DE DADOS
     public List<Produtos> listarTodos() {
         PreparedStatement stmt = null;
-        // Declaração do objeto PreparedStatement para executar a consulta
         ResultSet rs = null;
-        // Declaração do objeto ResultSet para armazenar os resultados da consulta
         produtos = new ArrayList<>();
-        // Cria uma lista para armazenar os produtos recuperados do banco de dados
         try {
             stmt = connection.prepareStatement("SELECT * FROM cadastro_produtos");
-            // Prepara a consulta SQL para selecionar todos os registros da tabela
             rs = stmt.executeQuery();
-            // Executa a consulta e armazena os resultados no ResultSet
             while (rs.next()) {
-                // Para cada registro no ResultSet, cria um objeto Produtos com os valores do
-                // registro
-
                 Produtos produto = new Produtos(
                         rs.getString("nome"),
                         rs.getString("codigo"),
                         rs.getString("quantidade"),
                         rs.getString("preco"));
-                produtos.add(produto); // Adiciona o objeto Produtos à lista de produtos
+                produtos.add(produto);
             }
         } catch (SQLException ex) {
-            System.out.println(ex); // Em caso de erro durante a consulta, imprime o erro
+            System.out.println(ex); 
         } finally {
             ConnectionFactory.closeConnection(connection, stmt, rs);
         }
-        return produtos; // Retorna a lista de produtos recuperados do banco de dados
+        return produtos;
     }
 
-    // Cadastrar Produto no banco
+    // CADASTRANDO os produtos no BANCO DE DADOS
     public void cadastrar(String nome, String codigo, String quantidade, String preco) {
         PreparedStatement stmt = null;
-        // Define a instrução SQL parametrizada para cadastrar na tabela
         String sql = "INSERT INTO cadastro_produtos (nome, codigo, quantidade, preco) VALUES (?, ?, ?, ?)";
         try {
             stmt = connection.prepareStatement(sql);
@@ -80,7 +70,6 @@ public class ProdutosDAO {
             stmt.setString(3, quantidade);
             stmt.setString(4, preco);
             stmt.executeUpdate();
-            System.out.println("Produtos Cadastrado com sucesso!");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao inserir cadastro de produtos no banco de dados.", e);
         } finally {
@@ -88,6 +77,7 @@ public class ProdutosDAO {
         }
     }
 
+    // ATUALIZANDO os produtos no BANCO DE DADOS
     public void atualizar(String nome, String codigo, String quantidade, String preco) {
         PreparedStatement stmt = null;
         String sql = "UPDATE cadastro_produtos SET nome = ?, quantidade = ?, preco = ? WHERE codigo = ?";
@@ -98,7 +88,6 @@ public class ProdutosDAO {
             stmt.setString(3, preco);
             stmt.setString(4, codigo);
             stmt.executeUpdate();
-            System.out.println("Cadastro de Produtos atualizados com sucesso");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar cadastro de produtos no banco de dados.", e);
         } finally {
@@ -106,10 +95,43 @@ public class ProdutosDAO {
         }
     }
 
-     // Apagar dados do banco
+    // Método para ATUALIZAR a QUANTIDADE de produtos APÓS UM CLIENTE REALIZAR UMA COMPRA
+    public void atualizarQuantidade(String codigo, int quantidadeVendida) {
+        PreparedStatement stmt = null;
+        PreparedStatement stmtUpdate = null;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM cadastro_produtos WHERE codigo = ?";
+        try {
+            stmt = connection.prepareStatement(sql);
+            stmt.setString(1, codigo);
+            rs = stmt.executeQuery();
+
+            // PEGANDO a QUANTIDADE de ITENS no BANCO DE DADOS
+            int quantidadeAtual = 0;
+            if (rs.next()) {
+                quantidadeAtual = rs.getInt("quantidade");
+            }
+
+            // CALCULANDO a NOVA QUANTIDADE APÓS A VENDA
+            int novaQuantidade = quantidadeAtual - quantidadeVendida;
+
+            // ATUALIZANDO a QUANTIDADE no BANCO DE DADOS
+            String sqlUpdate = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
+            stmtUpdate = connection.prepareStatement(sqlUpdate);
+            stmtUpdate.setInt(1, novaQuantidade);
+            stmtUpdate.setString(2, codigo);
+            stmtUpdate.executeUpdate();
+        } catch (SQLException e) {
+             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e);
+        } finally {
+            ConnectionFactory.closeConnection(connection, stmt, rs);
+        }
+
+    }
+
+     // APAGANDO os produtos no BANCO DE DADOS
      public void apagar(String codigo) {
         PreparedStatement stmt = null;
-        // Define a instrução SQL parametrizada para apagar dados pelo código de barras
         String sql = "DELETE FROM cadastro_produtos WHERE codigo = ?";
         try {
             stmt = connection.prepareStatement(sql);
@@ -123,6 +145,7 @@ public class ProdutosDAO {
         }
     }
 
+    // Método para BUSCAR o produto através do CÓDIGO
     public Produtos buscarProduto(String codigo) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
