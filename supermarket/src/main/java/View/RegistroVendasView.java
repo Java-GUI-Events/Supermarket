@@ -152,6 +152,23 @@ public class RegistroVendasView extends JPanel {
                 String cpfDoCliente = inputCPF.getText();
                 double totalVenda = Double.parseDouble(valorTotal.getText());
                 LocalDate dataDaVenda = LocalDate.now();
+
+                // Métodos de Pagamento
+                String[] opcoesPagamento = {"Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX"};
+                String metodoPagamento = (String) JOptionPane.showInputDialog(null,
+                        "Selecione o método de pagamento:",
+                        "Método de Pagamento",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opcoesPagamento,
+                        opcoesPagamento[0]);
+                        if (metodoPagamento != null) {
+                            VendasDAO vendasDAO = new VendasDAO();
+                            vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
+                            JOptionPane.showMessageDialog(null, "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Operação cancelada.");
+                        }
             }
         });
     }
