@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import Controller.CadastroClientes.ClientesDAO;
 import Controller.CadastroProdutos.ProdutosDAO;
 import Model.Vendas;
 
@@ -35,6 +36,7 @@ public class VendasControl {
 
       // Método para cadastrar um novo produto no banco de dados
     public void cadastrar(String idVenda, String cpf, String dataVenda, String valor) {
+        
         new ProdutosDAO().cadastrar(idVenda, cpf, dataVenda, valor);
         // Chama o método de cadastro no banco de dados
         atualizarTabela(); // Atualiza a tabela de exibição após o cadastro
@@ -53,5 +55,5 @@ public class VendasControl {
         // Chama o método de exclusão no banco de dados
         atualizarTabela(); // Atualiza a tabela de exibição após a exclusão
     }
+    }
     
-}

@@ -43,6 +43,7 @@ public class ClientesControl {
     public void cadastrar(String nome, String cpf, String dataNascimento) {
         if (validarNome(nome) && validarCPF(cpf) && validarDataNascimento(dataNascimento)) {
             new ClientesDAO().cadastrar(nome, cpf, dataNascimento);
+            
             atualizarTabela();
         } else {
             JOptionPane.showMessageDialog(null, "Dados inválidos. Por favor, verifique as informações inseridas.");

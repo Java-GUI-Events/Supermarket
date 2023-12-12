@@ -117,7 +117,7 @@ public class ClientesDAO {
         boolean cpfEncontrado = false;
         try {
             // Consulta SQL para buscar um cliente pelo CPF
-            String sql = "SELECT CPF FROM cadastro_clientes WHERE CPF = ?";
+            String sql = "SELECT * FROM cadastro_clientes WHERE CPF = ?";
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, cpf);
             rs = stmt.executeQuery();
@@ -127,11 +127,11 @@ public class ClientesDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar CPF no banco de dados." + e.getMessage(), e);
             // quando eu recebo a busca a conexão fecha e não permite a busca por mais de um cpf
-
         } finally {
-            ConnectionFactory.closeConnection(connection, stmt, rs);
-        }
-    
+            if (cpfEncontrado) {
+                ConnectionFactory.closeConnection(connection, stmt, rs);
+            }
+            }
         return cpfEncontrado;
     }
     
