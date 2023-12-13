@@ -135,7 +135,6 @@ public class RegistroVendasView extends JPanel {
         });
 
         btnApagar.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 inputCPF.setText("");
@@ -184,7 +183,7 @@ public class RegistroVendasView extends JPanel {
                         opcoesPagamento,
                         opcoesPagamento[0]);
                 if (metodoPagamento != null) {
-                    VendasDAO vendasDAO = new VendasDAO();
+                    VendasDAO vendasDAO = new VendasDAO();            
                     vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
                     JOptionPane.showMessageDialog(null,
                             "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento +

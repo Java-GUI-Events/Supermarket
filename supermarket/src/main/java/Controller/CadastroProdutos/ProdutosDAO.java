@@ -95,13 +95,15 @@ public class ProdutosDAO {
         }
     }
 
+    
+
     /// ATUALIZANDO os produtos no BANCO DE DADOS
-    public void atualizarQuantidade(String codigo, int quantidade) {
+    public void atualizarQuantidade(String codigo, int novaQuantidade) {
         PreparedStatement stmt = null;
         String sql = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, quantidade);
+            stmt.setInt(1, novaQuantidade);
             stmt.setString(2, codigo);
             stmt.executeUpdate();
         } catch (SQLException e) {
