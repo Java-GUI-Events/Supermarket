@@ -27,7 +27,7 @@ public class FramePrincipal extends JFrame{
 
         // Criação dos Componentes do Painel Inicial
         JLabel labelImagem = new JLabel(imagem);
-        JButton btnVenda = new JButton("VENDAS");
+        // JButton btnVenda = new JButton("VENDAS");
         JButton btnEstoque = new JButton("ESTOQUE");
 
         // Ação do Botão 
@@ -39,19 +39,19 @@ public class FramePrincipal extends JFrame{
             }
         });
 
-        btnVenda.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                cardLayout.previous(cardsPainel);
-            }
-        });
+        // btnVenda.addActionListener(new ActionListener() {
+        //     @Override
+        //     public void actionPerformed(java.awt.event.ActionEvent e) {
+        //         cardLayout.previous(cardsPainel);
+        //     }
+        // });
 
 
 
         // Adicionando os Componentes ao Painel Inicial
         inicialPainel.add(labelImagem, BorderLayout.NORTH);
-        inicialPainel.add(btnVenda, BorderLayout.WEST);
-        inicialPainel.add(btnEstoque, BorderLayout.EAST);
+        // inicialPainel.add(btnVenda, BorderLayout.WEST);
+        inicialPainel.add(btnEstoque, BorderLayout.CENTER);
 
         // Configuração do TabbedPane
         cardsPainel.add(inicialPainel, "Painel Inicial");
@@ -59,12 +59,13 @@ public class FramePrincipal extends JFrame{
 
         JTabbedPane abas = new JTabbedPane();
         abas.add("Cadastro de Produtos", new CadastroProdutosView());
+        abas.add("Cadastro de Clientes", new CadastroClientesView());
+        abas.add("Realizar Compra", new RegistroVendasView());
         cardsPainel.add(abas, "TabbedPane");
         add(cardsPainel);
 
         JTabbedPane abasVendas = new JTabbedPane();
-        abasVendas.add("Cadastro de Clientes", new CadastroClientesView());
-        abasVendas.add("Realizar Compra", new RegistroVendasView());
+
         cardsPainel.add(abasVendas, "TabbedAbas");
         add(cardsPainel);
 
