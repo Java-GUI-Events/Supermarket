@@ -47,6 +47,7 @@ public class RegistroVendasView extends JPanel {
     private JButton btnPesquisar;
     private JButton btnProduto;
     private JButton btnPagar;
+    private JButton btnApagar;
 
     // JTable - Tabela
     private DefaultTableModel tableModel;
@@ -92,6 +93,7 @@ public class RegistroVendasView extends JPanel {
         btnPesquisar = new JButton("Pesquisar Cliente");
         btnProduto = new JButton("Adicionar Produto");
         btnPagar = new JButton("Fechar Pedido");
+        btnApagar = new JButton("Apagar");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
         pesquisaPanel.add(labelCPF);
@@ -104,6 +106,7 @@ public class RegistroVendasView extends JPanel {
 
         pagarPanel.add(valorTotal);
         pagarPanel.add(btnPagar);
+        pagarPanel.add(btnApagar);
 
         // Adicionando os JButton ao btnPanel
 
@@ -125,9 +128,18 @@ public class RegistroVendasView extends JPanel {
             ProdutosDAO produtos = new ProdutosDAO();
             Produtos produto = produtos.buscarProduto(codigoProduto);
             if (Integer.parseInt(produto.getQuantidade()) >= 1) {
-                int novaQuantidade = Integer.parseInt(produto.getQuantidade())-1;
-                produtos.atualizarQuantidade(codigoProduto, novaQuantidade);
+                // int novaQuantidade = Integer.parseInt(produto.getQuantidade())-1;
+                // produtos.atualizarQuantidade(codigoProduto, novaQuantidade);
                 tabelaPreenchida(produto);
+            }
+        });
+
+        btnApagar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inputCPF.setText("");
+                inputProduto.setText("");
+                valorTotal.setText("");
             }
         });
 
@@ -194,8 +206,11 @@ public class RegistroVendasView extends JPanel {
             double preco = Double.parseDouble(precoString);
             precoTotal += preco;
         }
+        String precoTotalFormatado = String.format("%.2f", precoTotal);
+
         if (cpfEncontrado) {
             double precoVip = precoTotal - (precoTotal * 0.1);
+            String precoVipFormatado = String.format("%.2f", precoVip);
             valorTotal.setText(String.valueOf(precoVip));
         } else {
             valorTotal.setText(String.valueOf(precoTotal));
@@ -203,16 +218,33 @@ public class RegistroVendasView extends JPanel {
     }
 
     private void tabelaPreenchida(Produtos produto) {
+        int quantidadeProdutos = 1;
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         // Adicionando o produto a tabela
         Object[] listProducts = {
                 produto.getNome(),
                 produto.getCodigo(),
-                produto.getQuantidade(),
+                quantidadeProdutos,
                 produto.getPreco()
         };
         model.addRow(listProducts);
         TotalProdutos();
     }
+
+    private void tabelaEmBranco(Produtos produto) {
+        int quantidadeProdutos = 1;
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        // Adicionando o produto a tabela
+        Object[] listProducts = {
+                "",
+                "",
+                "",
+                ""
+        };
+        model.addRow(listProducts);
+        TotalProdutos();
+    }
+
+
 
 }

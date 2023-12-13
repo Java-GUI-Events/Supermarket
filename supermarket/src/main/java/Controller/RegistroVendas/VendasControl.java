@@ -36,11 +36,12 @@ public class VendasControl {
 
       // Método para cadastrar um novo produto no banco de dados
     public void cadastrar(String idVenda, String cpf, String dataVenda, String valor) {
-        
         new ProdutosDAO().cadastrar(idVenda, cpf, dataVenda, valor);
         // Chama o método de cadastro no banco de dados
         atualizarTabela(); // Atualiza a tabela de exibição após o cadastro
     }
+
+    
 
     // Método para atualizar os dados de um produto no banco de dados
     public void atualizar(String idVenda, String cpf, String dataVenda, String valor) {

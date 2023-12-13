@@ -95,30 +95,23 @@ public class ProdutosDAO {
         }
     }
 
-    // Método para ATUALIZAR a QUANTIDADE de produtos APÓS UM CLIENTE REALIZAR UMA COMPRA
+    /// ATUALIZANDO os produtos no BANCO DE DADOS
     public void atualizarQuantidade(String codigo, int quantidade) {
         PreparedStatement stmt = null;
-        PreparedStatement stmtUpdate = null;
-        ResultSet rs = null;
-        String sql = "SELECT * FROM cadastro_produtos WHERE codigo = ?";
+        String sql = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setString(1, codigo);
-            rs = stmt.executeQuery();
-
-            // ATUALIZANDO a QUANTIDADE no BANCO DE DADOS
-            String sqlUpdate = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
-            stmtUpdate = connection.prepareStatement(sqlUpdate);
-            stmtUpdate.setInt(1, quantidade);
-            stmtUpdate.setString(2, codigo);
-            stmtUpdate.executeUpdate();
+            stmt.setInt(1, quantidade);
+            stmt.setString(2, codigo);
+            stmt.executeUpdate();
         } catch (SQLException e) {
-             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e);
+            throw new RuntimeException("Erro ao atualizar a quantidade de produtos no banco de dados.", e);
         } finally {
-            ConnectionFactory.closeConnection(connection, stmt, rs);
+            ConnectionFactory.closeConnection(connection, stmt);
         }
-
     }
+    
+
 
      // APAGANDO os produtos no BANCO DE DADOS
      public void apagar(String codigo) {
@@ -161,3 +154,4 @@ public class ProdutosDAO {
     }
 
 }
+
