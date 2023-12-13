@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RegistroVendasView extends JPanel {
     // Atributos
@@ -169,7 +171,9 @@ public class RegistroVendasView extends JPanel {
                 // id = autoincremental no banco de dados
                 String cpfDoCliente = inputCPF.getText();
                 double totalVenda = Double.parseDouble(valorTotal.getText());
-                LocalDate dataDaVenda = LocalDate.now();
+                //LocalDate dataDaVenda = LocalDate.now();
+                String dataDaVenda = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                //System.out.println(localDateTime);
 
                 boolean cpfEncontrado = clientesDAO.verificarCPF(cpfDoCliente);
 

@@ -26,7 +26,7 @@ public class VendasDAO {
 
     // criar Tabela
     public void criaTabela() {
-        String sql = "CREATE TABLE IF NOT EXISTS registro_vendas (ID_VENDA SERIAL PRIMARY KEY, CPF VARCHAR(255), DATA_VENDA DATE, VALOR DECIMAL(10, 2))";
+        String sql = "CREATE TABLE IF NOT EXISTS registro_vendas (ID_VENDA SERIAL PRIMARY KEY, CPF VARCHAR(255), DATA_VENDA VARCHAR(255), VALOR DECIMAL(10, 2))";
         try (Statement stmt = this.connection.createStatement()) {
             stmt.execute(sql);
             System.out.println("Tabela de Registro de Vendas criada com sucesso!");
@@ -37,13 +37,13 @@ public class VendasDAO {
         }
     }
 
-    public void cadastrarVenda(String cpfCliente, LocalDate dataVenda, double valorTotal) {
+    public void cadastrarVenda(String cpfCliente, String dataVenda, double valorTotal) {
         PreparedStatement stmt = null;
         String sql = "INSERT INTO registro_vendas (CPF, DATA_VENDA, VALOR) VALUES (?, ?, ?)";
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, cpfCliente);
-            stmt.setDate(2, Date.valueOf(dataVenda));
+            stmt.setString(2, dataVenda);
             stmt.setDouble(3, valorTotal);
             stmt.executeUpdate();
             System.out.println("Venda Registrada com Sucesso");

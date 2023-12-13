@@ -122,7 +122,7 @@ public class ProdutosDAO {
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, codigo);
-            stmt.executeUpdate(); // Executa a instrução SQL
+            stmt.executeUpdate();
             System.out.println("Produto apagado com sucesso");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao apagar produto no banco de dados.", e);
