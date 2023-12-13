@@ -96,7 +96,7 @@ public class ProdutosDAO {
     }
 
     // Método para ATUALIZAR a QUANTIDADE de produtos APÓS UM CLIENTE REALIZAR UMA COMPRA
-    public void atualizarQuantidade(String codigo, int quantidadeVendida) {
+    public void atualizarQuantidade(String codigo, int quantidade) {
         PreparedStatement stmt = null;
         PreparedStatement stmtUpdate = null;
         ResultSet rs = null;
@@ -106,19 +106,10 @@ public class ProdutosDAO {
             stmt.setString(1, codigo);
             rs = stmt.executeQuery();
 
-            // PEGANDO a QUANTIDADE de ITENS no BANCO DE DADOS
-            int quantidadeAtual = 0;
-            if (rs.next()) {
-                quantidadeAtual = rs.getInt("quantidade");
-            }
-
-            // CALCULANDO a NOVA QUANTIDADE APÓS A VENDA
-            int novaQuantidade = quantidadeAtual - quantidadeVendida;
-
             // ATUALIZANDO a QUANTIDADE no BANCO DE DADOS
             String sqlUpdate = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
             stmtUpdate = connection.prepareStatement(sqlUpdate);
-            stmtUpdate.setInt(1, novaQuantidade);
+            stmtUpdate.setInt(1, quantidade);
             stmtUpdate.setString(2, codigo);
             stmtUpdate.executeUpdate();
         } catch (SQLException e) {

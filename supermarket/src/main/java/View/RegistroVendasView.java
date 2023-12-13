@@ -114,7 +114,6 @@ public class RegistroVendasView extends JPanel {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(pagarPanel, BorderLayout.SOUTH);
 
-
         // Criando a tabela no banco de dados
         new VendasDAO().criaTabela();
 
@@ -125,9 +124,12 @@ public class RegistroVendasView extends JPanel {
             String codigoProduto = inputProduto.getText();
             ProdutosDAO produtos = new ProdutosDAO();
             Produtos produto = produtos.buscarProduto(codigoProduto);
-            tabelaPreenchida(produto);
+            if (Integer.parseInt(produto.getQuantidade()) >= 1) {
+                int novaQuantidade = Integer.parseInt(produto.getQuantidade())-1;
+                produtos.atualizarQuantidade(codigoProduto, novaQuantidade);
+                tabelaPreenchida(produto);
+            }
         });
-
 
         // Tratamento de evento para o botão de pesquisar se o cliente está CADASTRADO
         btnPesquisar.addActionListener(new ActionListener() {
@@ -140,11 +142,13 @@ public class RegistroVendasView extends JPanel {
                     JOptionPane.showMessageDialog(null, "CPF encontrado no banco de dados!");
                 } else {
                     JOptionPane.showMessageDialog(null, "CPF não encontrado no banco de dados.");
+                    inputCPF.setText("");
                 }
             }
         });
 
-        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no BANCO DE DADOS
+        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no
+        // BANCO DE DADOS
         btnPagar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -153,8 +157,10 @@ public class RegistroVendasView extends JPanel {
                 double totalVenda = Double.parseDouble(valorTotal.getText());
                 LocalDate dataDaVenda = LocalDate.now();
 
+                boolean cpfEncontrado = clientesDAO.verificarCPF(cpfDoCliente);
+
                 // Métodos de Pagamento
-                String[] opcoesPagamento = {"Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX"};
+                String[] opcoesPagamento = { "Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX" };
                 String metodoPagamento = (String) JOptionPane.showInputDialog(null,
                         "Selecione o método de pagamento:",
                         "Método de Pagamento",
@@ -162,27 +168,38 @@ public class RegistroVendasView extends JPanel {
                         null,
                         opcoesPagamento,
                         opcoesPagamento[0]);
-                        if (metodoPagamento != null) {
-                            VendasDAO vendasDAO = new VendasDAO();
-                            vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
-                            JOptionPane.showMessageDialog(null, "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Operação cancelada.");
-                        }
+                if (metodoPagamento != null) {
+                    VendasDAO vendasDAO = new VendasDAO();
+                    vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
+                    JOptionPane.showMessageDialog(null,
+                            "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento +
+                                    "\n cpf:" + cpfDoCliente + "\n Total da Venda: " + totalVenda);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Operação cancelada.");
+                }
             }
         });
     }
 
+    // Somatório dos Produtos
     private void TotalProdutos() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         double precoTotal = 0.0;
+        ClientesDAO clientesDAO = new ClientesDAO();
+        String cpfClienteVip = inputCPF.getText();
+        boolean cpfEncontrado = clientesDAO.verificarCPF(cpfClienteVip);
 
         for (int i = 0; i < model.getRowCount(); i++) {
             String precoString = model.getValueAt(i, 3).toString();
             double preco = Double.parseDouble(precoString);
             precoTotal += preco;
         }
-        valorTotal.setText(String.valueOf(precoTotal));
+        if (cpfEncontrado) {
+            double precoVip = precoTotal - (precoTotal * 0.1);
+            valorTotal.setText(String.valueOf(precoVip));
+        } else {
+            valorTotal.setText(String.valueOf(precoTotal));
+        }
     }
 
     private void tabelaPreenchida(Produtos produto) {
@@ -197,6 +214,5 @@ public class RegistroVendasView extends JPanel {
         model.addRow(listProducts);
         TotalProdutos();
     }
-
 
 }
