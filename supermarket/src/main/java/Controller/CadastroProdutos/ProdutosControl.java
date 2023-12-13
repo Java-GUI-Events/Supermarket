@@ -67,7 +67,7 @@ public class ProdutosControl {
     // Método para VALIDAR se o NOME contém apenas LETRAS
     private boolean validarNome(String nome) {
         if (nome.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Por favor, insira seu nome.");
+            JOptionPane.showMessageDialog(null, "Por favor, insira o nome do produto.");
             return false;
         } else if (!nome.matches("[a-zA-ZÀ-ú\\s]+")) {
             JOptionPane.showMessageDialog(null, "Nome inválido. Insira apenas letras.");
