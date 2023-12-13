@@ -135,13 +135,16 @@ public class RegistroVendasView extends JPanel {
         });
 
         btnApagar.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 inputCPF.setText("");
                 inputProduto.setText("");
                 valorTotal.setText("");
+                tableModel.setRowCount(0);
             }
         });
+        
 
         // Tratamento de evento para o botão de pesquisar se o cliente está CADASTRADO
         btnPesquisar.addActionListener(new ActionListener() {
@@ -230,21 +233,5 @@ public class RegistroVendasView extends JPanel {
         model.addRow(listProducts);
         TotalProdutos();
     }
-
-    private void tabelaEmBranco(Produtos produto) {
-        int quantidadeProdutos = 1;
-        DefaultTableModel model = (DefaultTableModel) table.getModel();
-        // Adicionando o produto a tabela
-        Object[] listProducts = {
-                "",
-                "",
-                "",
-                ""
-        };
-        model.addRow(listProducts);
-        TotalProdutos();
-    }
-
-
 
 }
