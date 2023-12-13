@@ -30,6 +30,8 @@ import java.awt.event.ActionEvent;
 import java.awt.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class RegistroVendasView extends JPanel {
     // Atributos
@@ -47,6 +49,7 @@ public class RegistroVendasView extends JPanel {
     private JButton btnPesquisar;
     private JButton btnProduto;
     private JButton btnPagar;
+    private JButton btnApagar;
 
     // JTable - Tabela
     private DefaultTableModel tableModel;
@@ -92,6 +95,7 @@ public class RegistroVendasView extends JPanel {
         btnPesquisar = new JButton("Pesquisar Cliente");
         btnProduto = new JButton("Adicionar Produto");
         btnPagar = new JButton("Fechar Pedido");
+        btnApagar = new JButton("Apagar");
 
         // Adicionando os JLabel e os JTextField ao inputPanel
         pesquisaPanel.add(labelCPF);
@@ -104,6 +108,7 @@ public class RegistroVendasView extends JPanel {
 
         pagarPanel.add(valorTotal);
         pagarPanel.add(btnPagar);
+        pagarPanel.add(btnApagar);
 
         // Adicionando os JButton ao btnPanel
 
@@ -131,6 +136,17 @@ public class RegistroVendasView extends JPanel {
             }
         });
 
+        btnApagar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                inputCPF.setText("");
+                inputProduto.setText("");
+                valorTotal.setText("");
+                tableModel.setRowCount(0);
+            }
+        });
+        
+
         // Tratamento de evento para o botão de pesquisar se o cliente está CADASTRADO
         btnPesquisar.addActionListener(new ActionListener() {
             @Override
@@ -155,9 +171,9 @@ public class RegistroVendasView extends JPanel {
                 // id = autoincremental no banco de dados
                 String cpfDoCliente = inputCPF.getText();
                 double totalVenda = Double.parseDouble(valorTotal.getText());
-                LocalDate dataDaVenda = LocalDate.now();
-
-                boolean cpfEncontrado = clientesDAO.verificarCPF(cpfDoCliente);
+                //LocalDate dataDaVenda = LocalDate.now();
+                String dataDaVenda = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
+                //System.out.println(localDateTime);
 
                 // Métodos de Pagamento
                 String[] opcoesPagamento = { "Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX" };
@@ -169,7 +185,7 @@ public class RegistroVendasView extends JPanel {
                         opcoesPagamento,
                         opcoesPagamento[0]);
                 if (metodoPagamento != null) {
-                    VendasDAO vendasDAO = new VendasDAO();
+                    VendasDAO vendasDAO = new VendasDAO();            
                     vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
                     JOptionPane.showMessageDialog(null,
                             "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento +
@@ -194,8 +210,11 @@ public class RegistroVendasView extends JPanel {
             double preco = Double.parseDouble(precoString);
             precoTotal += preco;
         }
+        String precoTotalFormatado = String.format("%.2f", precoTotal);
+
         if (cpfEncontrado) {
             double precoVip = precoTotal - (precoTotal * 0.1);
+            String precoVipFormatado = String.format("%.2f", precoVip);
             valorTotal.setText(String.valueOf(precoVip));
         } else {
             valorTotal.setText(String.valueOf(precoTotal));
@@ -203,12 +222,13 @@ public class RegistroVendasView extends JPanel {
     }
 
     private void tabelaPreenchida(Produtos produto) {
+        int quantidadeProdutos = 1;
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         // Adicionando o produto a tabela
         Object[] listProducts = {
                 produto.getNome(),
                 produto.getCodigo(),
-                produto.getQuantidade(),
+                quantidadeProdutos,
                 produto.getPreco()
         };
         model.addRow(listProducts);

@@ -95,31 +95,26 @@ public class ProdutosDAO {
         }
     }
 
-    // Método para ATUALIZAR a QUANTIDADE de produtos APÓS UM CLIENTE REALIZAR UMA COMPRA
-    public void atualizarQuantidade(String codigo, int quantidade) {
+    
+
+    /// ATUALIZANDO os produtos no BANCO DE DADOS
+    public void atualizarQuantidade(String codigo, int novaQuantidade) {
         PreparedStatement stmt = null;
-        PreparedStatement stmtUpdate = null;
-        ResultSet rs = null;
-        String sql = "SELECT * FROM cadastro_produtos WHERE codigo = ?";
+        String sql = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
         try {
             stmt = connection.prepareStatement(sql);
-            stmt.setString(1, codigo);
-            rs = stmt.executeQuery();
-
-            // ATUALIZANDO a QUANTIDADE no BANCO DE DADOS
-            String sqlUpdate = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
-            stmtUpdate = connection.prepareStatement(sqlUpdate);
-             stmtUpdate.setString(1, codigo);
-            stmtUpdate.setInt(2, quantidade);
-            stmtUpdate.executeUpdate();
+            stmt.setInt(1, novaQuantidade);
+            stmt.setString(2, codigo);
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e); }
-        // } finally {
-        //     ConnectionFactory.closeConnection(connection, stmt, rs);
-        // }
+             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e);
+        } finally {
+            ConnectionFactory.closeConnection(connection, stmt);
+        }
 
     }
+    
+
 
      // APAGANDO os produtos no BANCO DE DADOS
      public void apagar(String codigo) {
@@ -128,7 +123,7 @@ public class ProdutosDAO {
         try {
             stmt = connection.prepareStatement(sql);
             stmt.setString(1, codigo);
-            stmt.executeUpdate(); // Executa a instrução SQL
+            stmt.executeUpdate();
             System.out.println("Produto apagado com sucesso");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao apagar produto no banco de dados.", e);
@@ -162,3 +157,4 @@ public class ProdutosDAO {
     }
 
 }
+
