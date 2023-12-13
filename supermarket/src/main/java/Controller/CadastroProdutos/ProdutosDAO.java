@@ -107,10 +107,11 @@ public class ProdutosDAO {
             stmt.setString(2, codigo);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao atualizar a quantidade de produtos no banco de dados.", e);
+             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e);
         } finally {
             ConnectionFactory.closeConnection(connection, stmt);
         }
+
     }
     
 

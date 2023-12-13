@@ -45,8 +45,6 @@ public class ClientesControl {
             new ClientesDAO().cadastrar(nome, cpf, dataNascimento);
             
             atualizarTabela();
-        } else {
-            JOptionPane.showMessageDialog(null, "Dados inválidos. Por favor, verifique as informações inseridas.");
         }
     }
     // Método para atualizar os dados de um produto no banco de dados
@@ -73,16 +71,31 @@ public class ClientesControl {
 
     // Método para VALIDAÇÃO do NOME contendo apenas LETRAS
     private boolean validarNome(String nome) {
-        if (nome.matches("[a-zA-ZÀ-ú\\s]+")) {
-            return true;
-        } else {
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira seu nome.");
+            return false;
+        } else if (!nome.matches("[a-zA-ZÀ-ú\\s]+")) {
             JOptionPane.showMessageDialog(null, "Nome inválido. Insira apenas letras.");
             return false;
+        } else {
+            return true;
         }
     }
 
     // Método para VALIDAÇÃO do CPF, utilizando os PADRÕES
-   private boolean validarCPF(String cpf) {
+    private boolean validarCPF(String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira o CPF.");
+            return false;
+        }
+    
+        try {
+            Long.parseLong(cpf.replaceAll("[^0-9]", "")); // Tenta converter para um número long
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "CPF inválido. Insira apenas números para o CPF.");
+            return false;
+        }
+    
         if (cpf.matches("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$")) {
             return true;
         } else {
@@ -90,9 +103,15 @@ public class ClientesControl {
             return false;
         }
     }
+    
 
     // Método para VALIDAÇÃO da DATA, utilizando SIMPLEDATEFORMAT
     private boolean validarDataNascimento(String dataNascimento) {
+        if (dataNascimento == null || dataNascimento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira a data de nascimento.");
+            return false;
+        }
+    
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             sdf.setLenient(false); // Não ACEITA datas inexistentes
@@ -103,6 +122,7 @@ public class ClientesControl {
             return false;
         }
     }
+    
 
     public JFormattedTextField criarCampoCPFFormatado() {
         JFormattedTextField cpfField = null;
