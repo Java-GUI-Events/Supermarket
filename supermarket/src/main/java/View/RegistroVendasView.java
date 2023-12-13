@@ -175,8 +175,6 @@ public class RegistroVendasView extends JPanel {
                 String dataDaVenda = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
                 //System.out.println(localDateTime);
 
-                boolean cpfEncontrado = clientesDAO.verificarCPF(cpfDoCliente);
-
                 // Métodos de Pagamento
                 String[] opcoesPagamento = { "Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX" };
                 String metodoPagamento = (String) JOptionPane.showInputDialog(null,
