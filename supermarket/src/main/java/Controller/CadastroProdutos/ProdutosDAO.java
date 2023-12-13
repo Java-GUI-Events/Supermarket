@@ -109,14 +109,15 @@ public class ProdutosDAO {
             // ATUALIZANDO a QUANTIDADE no BANCO DE DADOS
             String sqlUpdate = "UPDATE cadastro_produtos SET quantidade = ? WHERE codigo = ?";
             stmtUpdate = connection.prepareStatement(sqlUpdate);
-            stmtUpdate.setInt(1, quantidade);
-            stmtUpdate.setString(2, codigo);
+             stmtUpdate.setString(1, codigo);
+            stmtUpdate.setInt(2, quantidade);
             stmtUpdate.executeUpdate();
         } catch (SQLException e) {
-             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e);
-        } finally {
-            ConnectionFactory.closeConnection(connection, stmt, rs);
-        }
+            e.printStackTrace();
+             throw new RuntimeException("Erro ao atualizar a quantidade de ITENS no banco de dados.", e); }
+        // } finally {
+        //     ConnectionFactory.closeConnection(connection, stmt, rs);
+        // }
 
     }
 

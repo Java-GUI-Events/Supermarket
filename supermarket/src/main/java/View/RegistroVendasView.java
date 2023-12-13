@@ -125,8 +125,8 @@ public class RegistroVendasView extends JPanel {
             ProdutosDAO produtos = new ProdutosDAO();
             Produtos produto = produtos.buscarProduto(codigoProduto);
             if (Integer.parseInt(produto.getQuantidade()) >= 1) {
-                int novaQuantidade = Integer.parseInt(produto.getQuantidade())-1;
-                produtos.atualizarQuantidade(codigoProduto, novaQuantidade);
+                // int novaQuantidade = Integer.parseInt(produto.getQuantidade())-1;
+                // produtos.atualizarQuantidade(codigoProduto, novaQuantidade);
                 tabelaPreenchida(produto);
             }
         });

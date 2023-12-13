@@ -63,7 +63,7 @@ public class FramePrincipal extends JFrame{
         add(cardsPainel);
 
         JTabbedPane abasVendas = new JTabbedPane();
-        abasVendas.add("Cadastro de Clientes", new CadastroClientesView());
+        abasVendas.add("Cadastro de Clientes VIP", new CadastroClientesView());
         abasVendas.add("Realizar Compra", new RegistroVendasView());
         cardsPainel.add(abasVendas, "TabbedAbas");
         add(cardsPainel);

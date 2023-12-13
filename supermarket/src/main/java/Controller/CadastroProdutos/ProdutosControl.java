@@ -66,26 +66,38 @@ public class ProdutosControl {
 
     // Método para VALIDAR se o NOME contém apenas LETRAS
     private boolean validarNome(String nome) {
-        if (nome.matches("[a-zA-ZÀ-ú\\s]+")) {
-            return true;
-        } else {
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira seu nome.");
+            return false;
+        } else if (!nome.matches("[a-zA-ZÀ-ú\\s]+")) {
             JOptionPane.showMessageDialog(null, "Nome inválido. Insira apenas letras.");
             return false;
+        } else {
+            return true;
         }
     }
 
     // Método para VALDIAR se o CÓDIGO possui no MÁXIMO 2 DIGÍTOS
     private boolean validarCodigo(String codigo) {
-        if (codigo.matches("\\d{1,2}")) {
+        if (codigo.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira o número do código.");
+            return false;
+        } else if (codigo.matches("\\d{1,2}")) {
             return true;
         } else {
             JOptionPane.showMessageDialog(null, "Código inválido. Insira um código com no máximo dois dígitos.");
             return false;
         }
     }
+    
 
     // Método para VALIDAR se a QUANTIDADE tem no MÁXIMO 100
     private boolean validarQuantidade(String quantidade) {
+        if (quantidade.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira a quantidade.");
+            return false;
+        }
+    
         try {
             int valorQuantidade = Integer.parseInt(quantidade);
             if (valorQuantidade >= 0 && valorQuantidade <= 100) {
@@ -99,14 +111,22 @@ public class ProdutosControl {
             return false;
         }
     }
+    
 
     // Método para VALIDAR se o PREÇO contém APENAS NÚMEROS
     private boolean validarPreco(String preco) {
-        if (preco.matches("^\\d+(.|,)\\d{1,2}$")) {
+        if (preco.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, insira o preço.");
+            return false;
+        }
+    
+        try {
+            Double.parseDouble(preco.replace(',', '.')); // Tenta converter para um número double
             return true;
-        } else {
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Preço inválido. Insira apenas números para o preço.");
             return false;
         }
     }
+    
 }
