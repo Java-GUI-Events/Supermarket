@@ -134,8 +134,29 @@ public class ClientesDAO {
             }
         return cpfEncontrado;
     }
-    
 
+    // public String buscarNomePorCPF(String cpf) {
+    //     PreparedStatement stmt = null;
+    //     ResultSet rs = null;
+    //     String nomeCliente = null;
+        
+    //     try {
+    //         String sql = "SELECT nome FROM cadastro_clientes WHERE CPF = ?";
+    //         stmt = connection.prepareStatement(sql);
+    //         stmt.setString(1, cpf);
+    //         rs = stmt.executeQuery();
+            
+    //         if (rs.next()) {
+    //             nomeCliente = rs.getString("nome");
+    //         }
+            
+    //     } catch (SQLException e) {
+    //         throw new RuntimeException("Erro ao buscar nome do cliente pelo CPF no banco de dados: " + e.getMessage(), e);
+    //     } finally {
+    //         ConnectionFactory.closeConnection(connection, stmt, rs);
+    //     }
+    //     return nomeCliente;
+    // }
 
 
 }

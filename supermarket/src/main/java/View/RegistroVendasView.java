@@ -1,35 +1,25 @@
 package View;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.CadastroProdutos.ProdutosDAO;
-import Controller.RegistroVendas.VendasControl;
 import Controller.RegistroVendas.VendasDAO;
 import Model.Produtos;
-import Model.Vendas;
 import Controller.CadastroClientes.*;
 
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -40,10 +30,12 @@ public class RegistroVendasView extends JPanel {
     private JFormattedTextField inputCPF;
     private JTextField inputProduto;
     private JTextField valorTotal;
+    private JTextField nomeCliente;
 
     // JLabel
     private JLabel labelCPF;
     private JLabel labelProduto;
+    private JLabel labelValorTotal;
 
     // JButton
     private JButton btnPesquisar;
@@ -54,8 +46,6 @@ public class RegistroVendasView extends JPanel {
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<Vendas> vendas = new ArrayList<>();
-    private int linhaSelecionada = -1;
 
     // Construtor
     public RegistroVendasView() {
@@ -76,6 +66,7 @@ public class RegistroVendasView extends JPanel {
         tableModel.addColumn("Quantidade");
         tableModel.addColumn("Preço");
         table = new JTable(tableModel);
+        table.setFont(new Font("Monospaced", Font.BOLD, 16));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
         table.setDefaultEditor(Object.class, null);
@@ -83,19 +74,40 @@ public class RegistroVendasView extends JPanel {
         // Definindo o tamanho dos JTextField
         ClientesControl clientesControl = new ClientesControl(null, tableModel, table);
         inputCPF = clientesControl.criarCampoCPFFormatado();
+        inputCPF.setFont(new Font("Monospaced", Font.BOLD, 16));
         inputProduto = new JTextField(20);
+        inputProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
         valorTotal = new JTextField(10);
         valorTotal.setEditable(false);
+
+        nomeCliente = new JTextField(20);
+        nomeCliente.setEditable(false);
+        nomeCliente.setVisible(false);
+        nomeCliente.setFont(new Font("Monospaced", Font.BOLD, 16));
 
         // Definindo a escrita dos JLabel
         labelCPF = new JLabel("CPF");
         labelProduto = new JLabel("CÓDIGO PRODUTO");
+        labelValorTotal = new JLabel("Valor Total: ");
+        labelCPF.setFont(new Font("Monospaced", Font.BOLD, 16));
+        labelProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
 
         // Definindo os botões JButton
-        btnPesquisar = new JButton("Pesquisar Cliente");
-        btnProduto = new JButton("Adicionar Produto");
+        btnPesquisar = new JButton("Pesquisar Cliente 🔍");
+        btnPesquisar.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnPesquisar.setBackground(Color.LIGHT_GRAY);
+
+        btnProduto = new JButton("Adicionar Produto ➕");
+        btnProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnProduto.setBackground(Color.lightGray);
+
         btnPagar = new JButton("Fechar Pedido");
+        btnPagar.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnPagar.setBackground(Color.green);
+
         btnApagar = new JButton("Apagar");
+        btnApagar.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnApagar.setBackground(Color.red);
 
         // Adicionando os JLabel e os JTextField ao inputPanel
         pesquisaPanel.add(labelCPF);
@@ -105,7 +117,9 @@ public class RegistroVendasView extends JPanel {
         pesquisaPanel.add(labelProduto);
         pesquisaPanel.add(inputProduto);
         pesquisaPanel.add(btnProduto);
+        pesquisaPanel.add(nomeCliente);
 
+        pagarPanel.add(labelValorTotal);
         pagarPanel.add(valorTotal);
         pagarPanel.add(btnPagar);
         pagarPanel.add(btnApagar);
@@ -121,8 +135,6 @@ public class RegistroVendasView extends JPanel {
 
         // Criando a tabela no banco de dados
         new VendasDAO().criaTabela();
-
-        VendasControl operacoes = new VendasControl(vendas, tableModel, table);
 
         // Tratamento de evento para o botão de ADICIONAR os produtos pelo código
         btnProduto.addActionListener(e -> {
@@ -145,7 +157,6 @@ public class RegistroVendasView extends JPanel {
                 tableModel.setRowCount(0);
             }
         });
-        
 
         // Tratamento de evento para o botão de pesquisar se o cliente está CADASTRADO
         btnPesquisar.addActionListener(new ActionListener() {
@@ -154,8 +165,13 @@ public class RegistroVendasView extends JPanel {
                 String cpf = inputCPF.getText();
                 boolean cpfEncontrado = clientesDAO.verificarCPF(cpf);
 
+                // String nome = clientesDAO.buscarNomePorCPF(cpf);
+
                 if (cpfEncontrado) {
                     JOptionPane.showMessageDialog(null, "CPF encontrado no banco de dados!");
+                    nomeCliente.setVisible(true);
+                    nomeCliente.setText("Bem-Vindo Cliente VIP");
+                    labelValorTotal.setText("Valor Total (VIP)");
                 } else {
                     JOptionPane.showMessageDialog(null, "CPF não encontrado no banco de dados.");
                     inputCPF.setText("");
@@ -163,17 +179,16 @@ public class RegistroVendasView extends JPanel {
             }
         });
 
-        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no
-        // BANCO DE DADOS
+        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no BANCO DE DADOS
         btnPagar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // id = autoincremental no banco de dados
                 String cpfDoCliente = inputCPF.getText();
                 double totalVenda = Double.parseDouble(valorTotal.getText());
-                //LocalDate dataDaVenda = LocalDate.now();
+                // LocalDate dataDaVenda = LocalDate.now();
                 String dataDaVenda = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-                //System.out.println(localDateTime);
+                // System.out.println(localDateTime);
 
                 // Métodos de Pagamento
                 String[] opcoesPagamento = { "Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX" };
@@ -185,17 +200,23 @@ public class RegistroVendasView extends JPanel {
                         opcoesPagamento,
                         opcoesPagamento[0]);
                 if (metodoPagamento != null) {
-                    VendasDAO vendasDAO = new VendasDAO();            
+                    VendasDAO vendasDAO = new VendasDAO();
                     vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
                     JOptionPane.showMessageDialog(null,
-                            "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento +
-                                    "\n cpf:" + cpfDoCliente + "\n Total da Venda: " + totalVenda);
+                            "NOTA FISCAL!\nMétodo de pagamento: " + metodoPagamento +
+                                    "\n CPF: " + cpfDoCliente + "\n Preço Total: " + totalVenda + "\n Data da Venda: "
+                                    + dataDaVenda);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Operação cancelada.");
+                    JOptionPane.showMessageDialog(null, "Operação deu erro.");
                 }
             }
         });
     }
+
+    // Suponha que você tenha uma instância de ClientesDAO chamada clientesDAO
+
+    // Método para buscar o nome do cliente pelo CPF e definir o texto em um JTextField
+
 
     // Somatório dos Produtos
     private void TotalProdutos() {
@@ -210,14 +231,18 @@ public class RegistroVendasView extends JPanel {
             double preco = Double.parseDouble(precoString);
             precoTotal += preco;
         }
-        String precoTotalFormatado = String.format("%.2f", precoTotal);
+        // String precoTotalFormatado = String.format("%.2f", precoTotal);
 
         if (cpfEncontrado) {
             double precoVip = precoTotal - (precoTotal * 0.1);
-            String precoVipFormatado = String.format("%.2f", precoVip);
+            // String precoVipFormatado = String.format("%.2f", precoVip);
             valorTotal.setText(String.valueOf(precoVip));
+            valorTotal.setForeground(Color.BLUE);
+            valorTotal.setBackground(Color.lightGray);
+            valorTotal.setFont(new Font("Arial", Font.PLAIN, 16));
         } else {
             valorTotal.setText(String.valueOf(precoTotal));
+            valorTotal.setFont(new Font("Arial", Font.PLAIN, 16));
         }
     }
 

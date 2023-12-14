@@ -14,7 +14,7 @@ import java.awt.*;
 
 public class FramePrincipal extends JFrame{
 
-    ImageIcon imagem = new ImageIcon(getClass().getResource("telaInicial.png"));
+    ImageIcon imagem = new ImageIcon(getClass().getResource("telaInicial1.png"));
     
     public FramePrincipal(){
         super("Supermercado");
@@ -28,10 +28,13 @@ public class FramePrincipal extends JFrame{
         // Criação dos Componentes do Painel Inicial
         JLabel labelImagem = new JLabel(imagem);
         // JButton btnVenda = new JButton("VENDAS");
-        JButton btnEstoque = new JButton("ESTOQUE");
+        JButton btnEstoque = new JButton("MERCADO ->");
+        btnEstoque.setBackground(Color.black);
+        btnEstoque.setForeground(Color.white);
+        btnEstoque.setFont(new Font("Monospaced", Font.BOLD, 30));
 
         // Ação do Botão 
-                // ação para trocar os cards
+        // ação para trocar os cards
          btnEstoque.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -68,12 +71,12 @@ public class FramePrincipal extends JFrame{
         cardsPainel.add(abasVendas, "TabbedAbas");
         add(cardsPainel);
 
-        setBounds(300, 250, 1200, 500);
+        setBounds(300, 250, 1400, 600);
     }
 
     public void run() {
         setVisible(true);
-        //this.pack();
+        // this.pack();
     }
 
 }
