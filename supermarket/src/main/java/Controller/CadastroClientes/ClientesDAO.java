@@ -70,7 +70,6 @@ public class ClientesDAO {
             stmt.setString(3, data_nascimento);
             stmt.executeUpdate();
             System.out.println("Dados inseridos com sucesso");
-            JOptionPane.showMessageDialog(null, "Você Cadastrou!");
         } catch (SQLException e) {
                 throw new RuntimeException("Erro ao inserir dados no banco de dados.", e);
         } finally {

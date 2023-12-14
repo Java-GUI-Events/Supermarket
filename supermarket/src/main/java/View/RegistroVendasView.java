@@ -80,7 +80,7 @@ public class RegistroVendasView extends JPanel {
         valorTotal = new JTextField(10);
         valorTotal.setEditable(false);
 
-        nomeCliente = new JTextField(20);
+        nomeCliente = new JTextField(25);
         nomeCliente.setEditable(false);
         nomeCliente.setVisible(false);
         nomeCliente.setFont(new Font("Monospaced", Font.BOLD, 16));
@@ -164,8 +164,6 @@ public class RegistroVendasView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String cpf = inputCPF.getText();
                 boolean cpfEncontrado = clientesDAO.verificarCPF(cpf);
-
-                // String nome = clientesDAO.buscarNomePorCPF(cpf);
 
                 if (cpfEncontrado) {
                     JOptionPane.showMessageDialog(null, "CPF encontrado no banco de dados!");
