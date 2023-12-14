@@ -34,6 +34,7 @@ public class ProdutosControl {
       public void cadastrar(String nome, String codigo, String quantidade, String preco) {
         if (validarNome(nome) && validarCodigo(codigo) && validarQuantidade(quantidade) && validarPreco(preco)) {
             new ProdutosDAO().cadastrar(nome, codigo, quantidade, preco);
+            JOptionPane.showMessageDialog(null, "Produto " + nome + " cadastrado");
             atualizarTabela();
         } else {
             System.out.println("Dados inválidos");

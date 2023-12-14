@@ -43,7 +43,7 @@ public class ClientesControl {
     public void cadastrar(String nome, String cpf, String dataNascimento) {
         if (validarNome(nome) && validarCPF(cpf) && validarDataNascimento(dataNascimento)) {
             new ClientesDAO().cadastrar(nome, cpf, dataNascimento);
-            
+            JOptionPane.showMessageDialog(null, "Cliente " + nome + " cadastrado!");
             atualizarTabela();
         }
     }
@@ -61,6 +61,7 @@ public class ClientesControl {
     public void apagar(String cpf) {
         if (validarCPF(cpf)) {
             new ClientesDAO().apagar(cpf);
+            JOptionPane.showMessageDialog(null, "Cliente apagado!");
             atualizarTabela();
         } else {
             JOptionPane.showMessageDialog(null, "CPF inválido. Por favor, insira um CPF válido para apagar o cliente.");
