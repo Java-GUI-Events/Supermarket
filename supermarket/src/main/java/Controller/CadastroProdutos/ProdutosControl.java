@@ -56,8 +56,9 @@ public class ProdutosControl {
         if (validarCodigo(codigo)) {
             new ProdutosDAO().apagar(codigo);
             atualizarTabela();
+            JOptionPane.showMessageDialog(null, "Produto apagado com sucesso!");
         } else {
-            System.out.println("Código inválido. Por favor, insira um código válido para apagar o produto.");
+             JOptionPane.showMessageDialog(null, "Erro ao apagar produto!");
         }
     }
 
