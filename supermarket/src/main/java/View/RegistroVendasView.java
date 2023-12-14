@@ -95,13 +95,16 @@ public class RegistroVendasView extends JPanel {
         // Definindo os botões JButton
         btnPesquisar = new JButton("Pesquisar Cliente 🔍");
         btnPesquisar.setFont(new Font("Monospaced", Font.BOLD, 16));
-        btnPesquisar = new JButton("Adicionar Produto ➕");
-        btnProduto.setBackground(Color.LIGHT_GRAY);
+        btnPesquisar.setBackground(Color.LIGHT_GRAY);
+
+        btnProduto = new JButton("Adicionar Produto ➕");
         btnProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
         btnProduto.setBackground(Color.lightGray);
+
         btnPagar = new JButton("Fechar Pedido");
         btnPagar.setFont(new Font("Monospaced", Font.BOLD, 16));
         btnPagar.setBackground(Color.green);
+
         btnApagar = new JButton("Apagar");
         btnApagar.setFont(new Font("Monospaced", Font.BOLD, 16));
         btnApagar.setBackground(Color.red);
