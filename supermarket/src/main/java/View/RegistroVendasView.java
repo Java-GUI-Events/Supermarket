@@ -1,7 +1,5 @@
 package View;
 
-
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -32,6 +30,7 @@ public class RegistroVendasView extends JPanel {
     private JFormattedTextField inputCPF;
     private JTextField inputProduto;
     private JTextField valorTotal;
+    private JTextField nomeCliente;
 
     // JLabel
     private JLabel labelCPF;
@@ -78,6 +77,10 @@ public class RegistroVendasView extends JPanel {
         valorTotal = new JTextField(10);
         valorTotal.setEditable(false);
 
+        nomeCliente = new JTextField(20);
+        nomeCliente.setEditable(false);
+        nomeCliente.setVisible(false);
+
         // Definindo a escrita dos JLabel
         labelCPF = new JLabel("CPF");
         labelProduto = new JLabel("CÓDIGO PRODUTO");
@@ -97,6 +100,7 @@ public class RegistroVendasView extends JPanel {
         pesquisaPanel.add(labelProduto);
         pesquisaPanel.add(inputProduto);
         pesquisaPanel.add(btnProduto);
+        pesquisaPanel.add(nomeCliente);
 
         pagarPanel.add(labelValorTotal);
         pagarPanel.add(valorTotal);
@@ -136,7 +140,6 @@ public class RegistroVendasView extends JPanel {
                 tableModel.setRowCount(0);
             }
         });
-        
 
         // Tratamento de evento para o botão de pesquisar se o cliente está CADASTRADO
         btnPesquisar.addActionListener(new ActionListener() {
@@ -145,8 +148,13 @@ public class RegistroVendasView extends JPanel {
                 String cpf = inputCPF.getText();
                 boolean cpfEncontrado = clientesDAO.verificarCPF(cpf);
 
+                // String nome = clientesDAO.buscarNomePorCPF(cpf);
+
                 if (cpfEncontrado) {
                     JOptionPane.showMessageDialog(null, "CPF encontrado no banco de dados!");
+                    nomeCliente.setVisible(true);
+                    nomeCliente.setText("Bem-Vindo Cliente VIP");
+                    labelValorTotal.setText("Valor Total (VIP)");
                 } else {
                     JOptionPane.showMessageDialog(null, "CPF não encontrado no banco de dados.");
                     inputCPF.setText("");
@@ -161,9 +169,9 @@ public class RegistroVendasView extends JPanel {
                 // id = autoincremental no banco de dados
                 String cpfDoCliente = inputCPF.getText();
                 double totalVenda = Double.parseDouble(valorTotal.getText());
-                //LocalDate dataDaVenda = LocalDate.now();
+                // LocalDate dataDaVenda = LocalDate.now();
                 String dataDaVenda = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-                //System.out.println(localDateTime);
+                // System.out.println(localDateTime);
 
                 // Métodos de Pagamento
                 String[] opcoesPagamento = { "Cartão de Crédito", "Cartão de Débito", "Dinheiro", "PIX" };
@@ -175,17 +183,23 @@ public class RegistroVendasView extends JPanel {
                         opcoesPagamento,
                         opcoesPagamento[0]);
                 if (metodoPagamento != null) {
-                    VendasDAO vendasDAO = new VendasDAO();            
+                    VendasDAO vendasDAO = new VendasDAO();
                     vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
                     JOptionPane.showMessageDialog(null,
                             "NOTA FISCAL!\nMétodo de pagamento: " + metodoPagamento +
-                                    "\n CPF: " + cpfDoCliente + "\n Preço Total: " + totalVenda + "\n Data da Venda: " +dataDaVenda);
+                                    "\n CPF: " + cpfDoCliente + "\n Preço Total: " + totalVenda + "\n Data da Venda: "
+                                    + dataDaVenda);
                 } else {
                     JOptionPane.showMessageDialog(null, "Operação deu erro.");
                 }
             }
         });
     }
+
+    // Suponha que você tenha uma instância de ClientesDAO chamada clientesDAO
+
+    // Método para buscar o nome do cliente pelo CPF e definir o texto em um JTextField
+
 
     // Somatório dos Produtos
     private void TotalProdutos() {
@@ -206,9 +220,12 @@ public class RegistroVendasView extends JPanel {
             double precoVip = precoTotal - (precoTotal * 0.1);
             // String precoVipFormatado = String.format("%.2f", precoVip);
             valorTotal.setText(String.valueOf(precoVip));
+            valorTotal.setForeground(Color.BLUE);
+            valorTotal.setBackground(Color.lightGray);
+            valorTotal.setFont(new Font("Arial", Font.PLAIN, 16));
         } else {
             valorTotal.setText(String.valueOf(precoTotal));
-            
+            valorTotal.setFont(new Font("Arial", Font.PLAIN, 16));
         }
     }
 

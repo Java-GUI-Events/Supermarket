@@ -68,12 +68,12 @@ public class FramePrincipal extends JFrame{
         cardsPainel.add(abasVendas, "TabbedAbas");
         add(cardsPainel);
 
-        setBounds(300, 250, 1200, 500);
+        // setBounds(300, 250, 1400, 500);
     }
 
     public void run() {
         setVisible(true);
-        //this.pack();
+        this.pack();
     }
 
 }
