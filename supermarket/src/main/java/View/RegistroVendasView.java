@@ -1,35 +1,27 @@
 package View;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Controller.CadastroProdutos.ProdutosDAO;
-import Controller.RegistroVendas.VendasControl;
 import Controller.RegistroVendas.VendasDAO;
 import Model.Produtos;
-import Model.Vendas;
 import Controller.CadastroClientes.*;
 
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -44,6 +36,7 @@ public class RegistroVendasView extends JPanel {
     // JLabel
     private JLabel labelCPF;
     private JLabel labelProduto;
+    private JLabel labelValorTotal;
 
     // JButton
     private JButton btnPesquisar;
@@ -54,8 +47,6 @@ public class RegistroVendasView extends JPanel {
     // JTable - Tabela
     private DefaultTableModel tableModel;
     private JTable table;
-    private List<Vendas> vendas = new ArrayList<>();
-    private int linhaSelecionada = -1;
 
     // Construtor
     public RegistroVendasView() {
@@ -90,6 +81,7 @@ public class RegistroVendasView extends JPanel {
         // Definindo a escrita dos JLabel
         labelCPF = new JLabel("CPF");
         labelProduto = new JLabel("CÓDIGO PRODUTO");
+        labelValorTotal = new JLabel("Valor Total: ");
 
         // Definindo os botões JButton
         btnPesquisar = new JButton("Pesquisar Cliente");
@@ -106,6 +98,7 @@ public class RegistroVendasView extends JPanel {
         pesquisaPanel.add(inputProduto);
         pesquisaPanel.add(btnProduto);
 
+        pagarPanel.add(labelValorTotal);
         pagarPanel.add(valorTotal);
         pagarPanel.add(btnPagar);
         pagarPanel.add(btnApagar);
@@ -121,8 +114,6 @@ public class RegistroVendasView extends JPanel {
 
         // Criando a tabela no banco de dados
         new VendasDAO().criaTabela();
-
-        VendasControl operacoes = new VendasControl(vendas, tableModel, table);
 
         // Tratamento de evento para o botão de ADICIONAR os produtos pelo código
         btnProduto.addActionListener(e -> {
@@ -163,8 +154,7 @@ public class RegistroVendasView extends JPanel {
             }
         });
 
-        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no
-        // BANCO DE DADOS
+        // Tratamento de evento para o botão de PAGAR, que irá REGISTRAR a venda no BANCO DE DADOS
         btnPagar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -188,10 +178,10 @@ public class RegistroVendasView extends JPanel {
                     VendasDAO vendasDAO = new VendasDAO();            
                     vendasDAO.cadastrarVenda(cpfDoCliente, dataDaVenda, totalVenda);
                     JOptionPane.showMessageDialog(null,
-                            "Venda registrada com sucesso!\nMétodo de pagamento: " + metodoPagamento +
-                                    "\n cpf:" + cpfDoCliente + "\n Total da Venda: " + totalVenda);
+                            "NOTA FISCAL!\nMétodo de pagamento: " + metodoPagamento +
+                                    "\n CPF: " + cpfDoCliente + "\n Preço Total: " + totalVenda + "\n Data da Venda: " +dataDaVenda);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Operação cancelada.");
+                    JOptionPane.showMessageDialog(null, "Operação deu erro.");
                 }
             }
         });
@@ -210,14 +200,15 @@ public class RegistroVendasView extends JPanel {
             double preco = Double.parseDouble(precoString);
             precoTotal += preco;
         }
-        String precoTotalFormatado = String.format("%.2f", precoTotal);
+        // String precoTotalFormatado = String.format("%.2f", precoTotal);
 
         if (cpfEncontrado) {
             double precoVip = precoTotal - (precoTotal * 0.1);
-            String precoVipFormatado = String.format("%.2f", precoVip);
+            // String precoVipFormatado = String.format("%.2f", precoVip);
             valorTotal.setText(String.valueOf(precoVip));
         } else {
             valorTotal.setText(String.valueOf(precoTotal));
+            
         }
     }
 
