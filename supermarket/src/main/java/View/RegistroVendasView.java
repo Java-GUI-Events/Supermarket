@@ -66,6 +66,7 @@ public class RegistroVendasView extends JPanel {
         tableModel.addColumn("Quantidade");
         tableModel.addColumn("Preço");
         table = new JTable(tableModel);
+        table.setFont(new Font("Monospaced", Font.BOLD, 16));
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(table);
         table.setDefaultEditor(Object.class, null);
@@ -73,24 +74,37 @@ public class RegistroVendasView extends JPanel {
         // Definindo o tamanho dos JTextField
         ClientesControl clientesControl = new ClientesControl(null, tableModel, table);
         inputCPF = clientesControl.criarCampoCPFFormatado();
+        inputCPF.setFont(new Font("Monospaced", Font.BOLD, 16));
         inputProduto = new JTextField(20);
+        inputProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
         valorTotal = new JTextField(10);
         valorTotal.setEditable(false);
 
         nomeCliente = new JTextField(20);
         nomeCliente.setEditable(false);
         nomeCliente.setVisible(false);
+        nomeCliente.setFont(new Font("Monospaced", Font.BOLD, 16));
 
         // Definindo a escrita dos JLabel
         labelCPF = new JLabel("CPF");
         labelProduto = new JLabel("CÓDIGO PRODUTO");
         labelValorTotal = new JLabel("Valor Total: ");
+        labelCPF.setFont(new Font("Monospaced", Font.BOLD, 16));
+        labelProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
 
         // Definindo os botões JButton
-        btnPesquisar = new JButton("Pesquisar Cliente");
-        btnProduto = new JButton("Adicionar Produto");
+        btnPesquisar = new JButton("Pesquisar Cliente 🔍");
+        btnPesquisar.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnPesquisar = new JButton("Adicionar Produto ➕");
+        btnProduto.setBackground(Color.LIGHT_GRAY);
+        btnProduto.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnProduto.setBackground(Color.lightGray);
         btnPagar = new JButton("Fechar Pedido");
+        btnPagar.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnPagar.setBackground(Color.green);
         btnApagar = new JButton("Apagar");
+        btnApagar.setFont(new Font("Monospaced", Font.BOLD, 16));
+        btnApagar.setBackground(Color.red);
 
         // Adicionando os JLabel e os JTextField ao inputPanel
         pesquisaPanel.add(labelCPF);
